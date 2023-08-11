@@ -110,14 +110,10 @@ export default function Header() {
 			</div>
 			<Modal
 				dismissible
-				position={props.modalPlacement}
 				show={props.openModal === 'dismissible'}
-				onClose={() => {
-					props.setOpenModal(undefined);
-					setVariant('REGISTER');
-				}}
+				onClose={() => props.setOpenModal(undefined)}
 			>
-				<Modal.Body className="overflow-auto">
+				<Modal.Body className="overflow-hidden">
 					<div className="relative">
 						<div>
 							<SocialButton
