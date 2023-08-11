@@ -1,3 +1,4 @@
+import Footer from '../components/Footer/Footer';
 import Header from '../components/header/Header';
 import React from 'react';
 
@@ -10,6 +11,7 @@ const LayoutDefault = ({ children }: LayoutDefaultProps) => {
 		<div>
 			<Header />
 			{children}
+			<Footer />
 		</div>
 	);
 };
