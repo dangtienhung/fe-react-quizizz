@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
 			{
 				path: 'quiz',
 				children: [
-					{ path: 'lists', element: <QuizLists /> },
+					{ path: 'lists/:id', element: <QuizLists /> },
 					{ path: 'edit/:id', element: <QuizEdit /> },
 					{ path: 'questions/create/:id', element: <CreateQuestion /> },
 				],

@@ -24,7 +24,7 @@ const Sidebar = () => {
 	/* create quizizz */
 	const createQuizizzMutate = useMutation({
 		mutationFn: () => {
-			return createQuiz({ title: 'Quizizz', user: user._id, questions: [] });
+			return createQuiz({ title: '', user: user._id, questions: [] });
 		},
 	});
 	const createQuizizz = async () => {

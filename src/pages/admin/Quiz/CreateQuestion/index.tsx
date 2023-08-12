@@ -79,7 +79,7 @@ const CreateQuestion = () => {
 			setAnswers(lengthAnswers.map((_) => ({ content: '', isCorrect: false })));
 			setTime(30);
 			setPoint(1);
-			navigate('/admin/quiz/lists');
+			navigate(`/admin/quiz/lists/${id}`);
 		} catch (error) {
 			console.log(error);
 		}

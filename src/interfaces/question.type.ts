@@ -1,3 +1,5 @@
+import { IAnswer } from './answer.type';
+
 interface QuizizzQuestionAnswer {
 	_id: string;
 	content: string;
@@ -27,4 +29,11 @@ export interface QuizizzQuestion {
 export interface CreateQuizQuestion
 	extends Pick<QuizizzQuestion, 'title' | 'score' | 'timer'> {
 	questionAnswers: IQuestionAnswer[];
+}
+
+export interface IQuizizzQuestion {
+	_id: string;
+	title: string;
+	score: number;
+	questionAnswers: IAnswer[];
 }
