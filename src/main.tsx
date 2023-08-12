@@ -1,5 +1,6 @@
 import './index.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 

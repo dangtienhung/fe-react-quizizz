@@ -1,5 +1,6 @@
-import Header from '../../components/Header';
 import CardGame from './CardGame';
+import Header from '../../components/Header';
+import { IQuizizzQuestion } from '../../../../interfaces/question.type';
 
 const cardGameList = [
 	{ bgColor: '#2F6DAE', boxShadow: '#214E7C' },
@@ -8,7 +9,12 @@ const cardGameList = [
 	{ bgColor: '#D4546A', boxShadow: '#BA2F47' },
 ];
 
-const GameSolo = () => {
+interface GameSoloProps {
+	questions: IQuizizzQuestion[];
+}
+
+const GameSolo = ({ questions }: GameSoloProps) => {
+	console.log('🚀 ~ file: GameSolo.tsx:17 ~ GameSolo ~ questions:', questions);
 	return (
 		<div className="flex flex-col h-screen bg-black select-none">
 			<Header />

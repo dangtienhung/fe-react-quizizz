@@ -52,7 +52,10 @@ const ListQuizizz = () => {
 								>
 									<div className="bg-primary w-[104px] h-[104px] rounded overflow-hidden">
 										<img
-											src="https://cf.quizizz.com/img/logos/new/logo_placeholder_sm.png?w=200&h=200"
+											src={
+												item.image ||
+												'https://cf.quizizz.com/img/logos/new/logo_placeholder_sm.png?w=200&h=200'
+											}
 											alt={item.title}
 											className="object-cover w-full h-full"
 											height={104}

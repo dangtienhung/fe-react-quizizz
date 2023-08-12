@@ -11,6 +11,7 @@ export interface IQuizizz {
 
 export interface IQuizizzs {
 	_id: string;
+	image?: string;
 	title: string;
 	slug: string;
 	questions: IQuizizzQuestion[];

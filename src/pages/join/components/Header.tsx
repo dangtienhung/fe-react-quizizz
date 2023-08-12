@@ -1,5 +1,5 @@
-import { VscClose } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
+import { VscClose } from 'react-icons/vsc';
 
 const Header = () => {
 	return (
@@ -12,6 +12,9 @@ const Header = () => {
 				</Link>
 				<div className="cursor-pointer h-10 w-10 rounded-lg !text-white flex justify-center items-center bg-[#333]">
 					<VscClose size={20} />
+				</div>
+				<div className="h-10 rounded-lg !text-white px-4 flex justify-center items-center bg-[#333]">
+					1/13
 				</div>
 			</div>
 			<div className="">hehe</div>
