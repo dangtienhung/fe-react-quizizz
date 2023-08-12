@@ -1,6 +1,7 @@
 import CardGame from './CardGame';
 import Header from '../../components/Header';
 import { IQuizizzQuestion } from '../../../../interfaces/question.type';
+import { useState } from 'react';
 
 const cardGameList = [
 	{ bgColor: '#2F6DAE', boxShadow: '#214E7C' },
@@ -14,6 +15,9 @@ interface GameSoloProps {
 }
 
 const GameSolo = ({ questions }: GameSoloProps) => {
+	const [currentQuestion, setCurrentQuestion] = useState(0);
+	const [score, setScore] = useState(0);
+	const [showScore, setShowScore] = useState(false);
 	console.log('🚀 ~ file: GameSolo.tsx:17 ~ GameSolo ~ questions:', questions);
 	return (
 		<div className="flex flex-col h-screen bg-black select-none">
