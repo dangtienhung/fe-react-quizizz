@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
 				children: [
 					{ path: 'lists', element: <QuizLists /> },
 					{ path: 'edit/:id', element: <QuizEdit /> },
-					{ path: 'questions/create', element: <CreateQuestion /> },
+					{ path: 'questions/create/:id', element: <CreateQuestion /> },
 				],
 			},
 		],

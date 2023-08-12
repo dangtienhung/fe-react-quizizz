@@ -6,13 +6,15 @@ import {
 	BsImageFill,
 	BsTrash3,
 } from 'react-icons/bs';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import { FaSave } from 'react-icons/fa';
 import Header from './components/Header';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import { IQuestionAnswer } from '../../../../interfaces/question.type';
-import { Link } from 'react-router-dom';
+import { createQuestion } from '../../../../api/quizQuestion';
+import { useMutation } from 'react-query';
 
 enum QuestionType {
 	SINGLE = 'single',
@@ -20,6 +22,8 @@ enum QuestionType {
 }
 
 const CreateQuestion = () => {
+	const navigate = useNavigate();
+	const { id } = useParams();
 	/* tạo độ dài mảng */
 	const [lengthAnswers, setLengthAnswers] = React.useState<number[]>([
 		1, 2, 3, 4,
@@ -53,15 +57,32 @@ const CreateQuestion = () => {
 		setAnswers((prev) => [...prev, { content: '', isCorrect: false }]);
 		setLengthAnswers((prev) => [...prev, index]);
 	};
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const data = {
-			title: question,
-			questionAnswers: answers,
-			score: point,
-			timer: time,
-		};
-		console.log('🚀 ~ file: index.tsx:64 ~ handleSubmit ~ data:', data);
+	/* thêm câu hỏi vào */
+	const addQuestionMutation = useMutation({
+		mutationFn: (body: any) => {
+			return createQuestion(body);
+		},
+	});
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		try {
+			e.preventDefault();
+			const data = {
+				title: question,
+				questionAnswers: answers,
+				score: point,
+				timer: time,
+				quizizz: id,
+			};
+			await addQuestionMutation.mutateAsync(data);
+			/* reset form */
+			setQuestion('');
+			setAnswers(lengthAnswers.map((_) => ({ content: '', isCorrect: false })));
+			setTime(30);
+			setPoint(1);
+			navigate('/admin/quiz/lists');
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	/* check đáp án đúng */
 	const handleToggleCorrectAnswer = (index: number) => {
@@ -69,7 +90,7 @@ const CreateQuestion = () => {
 		if (questionType === QuestionType.SINGLE) {
 			setAnswers((prev: IQuestionAnswer[]) => {
 				const updatedAnswers = [...prev];
-				updatedAnswers.forEach((answer, i) => {
+				updatedAnswers.forEach((_, i) => {
 					if (i === index) {
 						updatedAnswers[i].isCorrect = true;
 					} else {
@@ -122,7 +143,7 @@ const CreateQuestion = () => {
 			<form
 				autoComplete="off"
 				className="flex flex-col flex-1 h-full"
-				onSubmit={handleSubmit}
+				onSubmit={onSubmit}
 			>
 				<div className="flex-1 h-full">
 					<div className="h-full w-full max-w-5xl mx-auto p-4 rounded-xl bg-[#461A42] flex flex-col gap-2">
@@ -141,8 +162,8 @@ const CreateQuestion = () => {
 							<textarea
 								cols={30}
 								value={question}
-								onChange={(e) => setQuestion(e.target.value)}
 								rows={10}
+								onChange={(e) => setQuestion(e.target.value)}
 								placeholder="Câu hỏi"
 								style={{ boxShadow: 'none' }}
 								className="flex justify-center text-base bg-transparent w-full text-white h-[150px] items-center text-center resize-none rounded-xl border-none outline-none"
@@ -300,12 +321,13 @@ const CreateQuestion = () => {
 								Hủy
 							</button>
 						</Link>
-						{/* <Link href={`/admin/quiz/lists`} className="inline-block"> */}
-						<button className="flex gap-1 items-center bg-[#161616] rounded py-1 px-2">
+						<button
+							type="submit"
+							className="flex gap-1 items-center bg-[#161616] rounded py-1 px-2"
+						>
 							<FaSave />
 							<span className="text-sm font-semibold text-white">Lưu</span>
 						</button>
-						{/* </Link> */}
 					</div>
 				</div>
 			</form>

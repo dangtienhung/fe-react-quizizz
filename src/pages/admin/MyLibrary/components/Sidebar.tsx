@@ -1,12 +1,17 @@
 import { AiOutlinePlusCircle, AiOutlineSetting } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { IoIosLogOut } from 'react-icons/io';
-import { VscLibrary } from 'react-icons/vsc';
-import { useState } from 'react';
 import { Modal } from 'flowbite-react';
-import { Link } from 'react-router-dom';
+import { VscLibrary } from 'react-icons/vsc';
+import { createQuiz } from '../../../../api/quizizz';
+import { useMutation } from 'react-query';
+import { useState } from 'react';
+import { userStore } from '../../../../store/userStore';
 
 const Sidebar = () => {
+	const navigate = useNavigate();
+	const { user } = userStore((state) => state);
 	const menus = [
 		{ id: 1, name: 'Thư viện của tôi', icon: <VscLibrary /> },
 		{ id: 2, name: 'Cài đặt', icon: <AiOutlineSetting /> },
@@ -15,6 +20,21 @@ const Sidebar = () => {
 	const [isActive, setIsActive] = useState<number>(0);
 	const [openModal, setOpenModal] = useState<string | undefined>();
 	const props = { openModal, setOpenModal };
+
+	/* create quizizz */
+	const createQuizizzMutate = useMutation({
+		mutationFn: () => {
+			return createQuiz({ title: 'Quizizz', user: user._id, questions: [] });
+		},
+	});
+	const createQuizizz = async () => {
+		try {
+			const response = await createQuizizzMutate.mutateAsync();
+			navigate(`/admin/quiz/questions/create/${response.data._id}`);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<div className="min-h-screen w-full max-w-[200px] border-r shadow">
@@ -70,11 +90,11 @@ const Sidebar = () => {
 							className="rounded-lg mb-5 border hover:bg-[rgb(237,230,246)] hover:border-primary cursor-pointer gap-3 flex flex-col px-4 pt-3 pb-4"
 							style={{ boxShadow: '0 4px #b6b6b6' }}
 						>
-							<Link
-								to={`/admin/quiz/edit/quizEditId`}
-								className="inline-block w-full h-full"
-							>
-								<div className="flex items-center gap-3">
+							<div className="inline-block w-full h-full select-none">
+								<div
+									className="flex items-center gap-3"
+									onClick={() => createQuizizz()}
+								>
 									<img
 										src={`https://cf.quizizz.com/img/illustrations/quiz.png`}
 										alt="empty-state"
@@ -87,7 +107,7 @@ const Sidebar = () => {
 								<span className="text-sm text-[#6d6d6d] text-left">
 									Đánh giá và thực hành tạo động lực với các câu hỏi tương tác
 								</span>
-							</Link>
+							</div>
 						</div>
 						<div
 							className="rounded-lg border mb-5 hover:bg-[rgb(237,230,246)] hover:border-primary cursor-pointer gap-3 flex flex-col px-4 pt-3 pb-4"

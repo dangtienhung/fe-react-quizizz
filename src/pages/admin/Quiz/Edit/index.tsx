@@ -35,7 +35,7 @@ const QuizEdit = () => {
 											<Link
 												to={`/admin/quiz/questions/create`}
 												className="flex duration-100 items-center gap-1 rounded hover:bg-[#EDE6F6] cursor-pointer p-1"
-												key={typeQuestion._id}
+												key={typeQuestion._id || typeQuestion.id}
 											>
 												<span className="bg-[#2D9DA6] p-1 rounded text-white">
 													<BsCheckSquare />
