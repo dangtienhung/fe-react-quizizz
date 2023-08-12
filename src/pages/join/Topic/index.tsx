@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import LayoutDefault from '../../../layouts/LayoutDefault';
 import { Pagination } from 'flowbite-react';
 import QuizizzList from '../../../components/QuizizzList/QuizizzList';
