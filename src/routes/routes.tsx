@@ -1,5 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
+import CreateQuestion from '../pages/admin/Quiz/CreateQuestion';
 import HomePage from '../pages/home';
 import MyLibrary from '../pages/admin/MyLibrary';
 import PreQuiz from '../pages/join/Quiz';
@@ -30,7 +31,7 @@ export const router = createBrowserRouter([
 				children: [
 					{ path: 'lists', element: <QuizLists /> },
 					{ path: 'edit/:id', element: <QuizEdit /> },
-					{ path: 'questions/create', element: 'ahihi' },
+					{ path: 'questions/create', element: <CreateQuestion /> },
 				],
 			},
 		],
