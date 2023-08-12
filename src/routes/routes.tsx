@@ -1,4 +1,9 @@
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import {
+	Navigate,
+	Outlet,
+	createBrowserRouter,
+	useNavigate,
+} from 'react-router-dom';
 
 import CreateQuestion from '../pages/admin/Quiz/CreateQuestion';
 import HomePage from '../pages/home';
@@ -9,6 +14,20 @@ import QuizLists from '../pages/admin/Quiz/Lists/Lists';
 import QuizizzGame from '../pages/join/Game';
 import Setting from '../pages/join/Setting/Setting';
 import Toppic from '../pages/join/Topic';
+import { useEffect } from 'react';
+import { userStore } from '../store/userStore';
+
+const PrivateRoute = ({ isAuth }: any) => {
+	const { user } = userStore((state) => state);
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (!user._id) {
+			navigate('/');
+		}
+	}, [isAuth]);
+
+	return user._id ? <Outlet /> : <Navigate to="/" />;
+};
 
 export const router = createBrowserRouter([
 	{ path: '/', element: <HomePage /> },
@@ -23,6 +42,7 @@ export const router = createBrowserRouter([
 	},
 	{
 		path: '/admin',
+		element: <PrivateRoute />,
 		children: [
 			{ index: true, element: <Navigate to="my-library" /> },
 			{ path: 'my-library', element: <MyLibrary /> },

@@ -4,12 +4,14 @@ import { Button, Label, Modal, TextInput } from 'flowbite-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { IRegister } from '../../interfaces/user.type';
 import { Link } from 'react-router-dom';
 import Logo from '../logo/Logo';
 import Menu from './components/Menu';
 import SocialButton from './components/SocialButton';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { userStore } from '../../store/userStore';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 type Variant = 'LOGIN' | 'REGISTER';
@@ -35,13 +37,12 @@ export default function Header() {
 	const [variant, setVariant] = useState<Variant>('LOGIN');
 	const [modalPlacement, setModalPlacement] = useState<string>('center');
 	const props = { openModal, setOpenModal, modalPlacement, setModalPlacement };
-	// const {
-	// 	registerAuth,
-	// 	loginAuth,
-	// 	errors: errorList,
-	// 	isLoading,
-	// 	user,
-	// } = userStore((state) => state);
+	const {
+		registerAuth,
+		loginAuth,
+		errors: errorList,
+		user,
+	} = userStore((state) => state);
 	const toggleVariant = useCallback(() => {
 		if (variant === 'LOGIN') {
 			setVariant('REGISTER');
@@ -49,63 +50,65 @@ export default function Header() {
 			setVariant('LOGIN');
 		}
 	}, [variant]);
-	// useEffect(() => {
-	// 	if (errorList) {
-	// 		toast.error(errorList);
-	// 	}
-	// 	if (openModal === undefined) {
-	// 		setVariant('LOGIN');
-	// 	}
-	// }, [errorList]);
-	// useEffect(() => {
-	// 	setUserInfo(user);
-	// }, [user]);
-	// const onSubmit = async (data: FormData) => {
-	// 	try {
-	// 		if (variant === 'REGISTER') {
-	// 			await registerAuth(data as IRegister);
-	// 			if (errorList !== undefined) {
-	// 				setVariant('LOGIN');
-	// 				toast.success('Đăng ký thành công');
-	// 			}
-	// 		} else {
-	// 			await loginAuth(data as IRegister);
-	// 			if (errorList !== undefined) {
-	// 				toast.success('Đăng nhập thành công');
-	// 				setOpenModal(undefined);
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
+	useEffect(() => {
+		if (errorList) {
+			toast.error(errorList);
+		}
+		if (openModal === undefined) {
+			setVariant('LOGIN');
+		}
+	}, [errorList]);
+	const onSubmit = async (data: FormData) => {
+		try {
+			if (variant === 'REGISTER') {
+				await registerAuth(data as IRegister);
+				if (errorList !== undefined) {
+					setVariant('LOGIN');
+					toast.success('Đăng ký thành công');
+				}
+			} else {
+				await loginAuth(data as IRegister);
+				if (errorList !== undefined) {
+					toast.success('Đăng nhập thành công');
+					setOpenModal(undefined);
+				}
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<div className="h-14 flex md:justify-start justify-between items-center w-full px-4 bg-white md:border-b-2 border-b border-b-[e4e4e4]">
 				<Logo />
 				<Menu />
 				<div className="md:flex items-center hidden gap-4">
-					<button
-						className="btn bg-gray-1 font-bold text-black"
-						onClick={() => {
-							props.setOpenModal('dismissible'), setVariant('REGISTER');
-						}}
-					>
-						Đăng ký
-					</button>
-					<button
-						className="btn bg-primary hover:bg-primary font-bold text-white"
-						onClick={() => {
-							props.setOpenModal('dismissible'), setVariant('LOGIN');
-						}}
-					>
-						Đăng nhập
-					</button>
-					<Link to={`/admin/my-library`} className="inline-block">
-						<button className="btn bg-gray-1 font-bold text-black">
-							<AiOutlinePlusCircle size={24} /> Tạo một bài quizizz
-						</button>
-					</Link>
+					{Object.keys(user).length === 0 ? (
+						<>
+							<button
+								className="btn bg-gray-1 font-bold text-black"
+								onClick={() => {
+									props.setOpenModal('dismissible'), setVariant('REGISTER');
+								}}
+							>
+								Đăng ký
+							</button>
+							<button
+								className="btn bg-primary hover:bg-primary font-bold text-white"
+								onClick={() => {
+									props.setOpenModal('dismissible'), setVariant('LOGIN');
+								}}
+							>
+								Đăng nhập
+							</button>
+						</>
+					) : (
+						<Link to={`/admin/my-library`} className="inline-block">
+							<button className="btn bg-gray-1 font-bold text-black">
+								<AiOutlinePlusCircle size={24} /> Tạo một bài quizizz
+							</button>
+						</Link>
+					)}
 				</div>
 			</div>
 			<Modal
@@ -141,7 +144,11 @@ export default function Header() {
 									style={{ left: '60%' }}
 								></span>
 							</div>
-							<form className="flex flex-col gap-4 mt-5" autoComplete="off">
+							<form
+								className="flex flex-col gap-4 mt-5"
+								autoComplete="off"
+								onSubmit={handleSubmit(onSubmit)}
+							>
 								{variant === 'REGISTER' && (
 									<div>
 										<div className="block mb-2">
