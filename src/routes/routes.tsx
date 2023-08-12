@@ -3,15 +3,13 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import HomePage from '../pages/home';
 import MyLibrary from '../pages/admin/MyLibrary';
 import PreQuiz from '../pages/join/Quiz';
+import QuizLists from '../pages/admin/Quiz/Lists/Lists';
 import QuizizzGame from '../pages/join/Game';
 import Setting from '../pages/join/Setting/Setting';
 import Toppic from '../pages/join/Topic';
 
 export const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <HomePage />,
-	},
+	{ path: '/', element: <HomePage /> },
 	{
 		path: '/join',
 		children: [
@@ -26,6 +24,10 @@ export const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <Navigate to="my-library" /> },
 			{ path: 'my-library', element: <MyLibrary /> },
+			{
+				path: 'quiz',
+				children: [{ path: 'lists', element: <QuizLists /> }],
+			},
 		],
 	},
 ]);
