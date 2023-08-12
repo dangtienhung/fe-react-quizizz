@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
 
 const ActionableContent = () => {
 	return (
@@ -23,7 +22,7 @@ const ActionableContent = () => {
 				</div>
 				<div className="hidden lg:w-[30%] p-4 bg-white rounded-2xl flex-col shadow-md h-[215px] lg:flex justify-center items-center">
 					<>
-						<div className="mb-5">
+						<div className="hidden mb-5">
 							<img
 								src="https://images.careerbuilder.vn/content/images/cung-bach-duong-CareerBuilder-4.jpg"
 								alt="Picture of the author"
@@ -32,7 +31,7 @@ const ActionableContent = () => {
 								width={80}
 							/>
 						</div>
-						<div className="">
+						<div className="hidden">
 							<p className="text-center">
 								<Link
 									to={`/register`}
@@ -45,7 +44,7 @@ const ActionableContent = () => {
 						</div>
 					</>
 					<>
-						<div className="hidden">
+						<div className="">
 							<div className="mb-5 text-center">
 								<img
 									src={
