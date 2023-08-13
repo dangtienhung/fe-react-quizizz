@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import GameSolo from './components/GameSolo';
 import Summary from './components/Summary';
-import { useQuizizzStore } from '../../../store/quizizzStore';
+import { useQuizizzStore } from '@/store/quizizzStore';
 
 enum GameType {
 	SOLO = 'solo',

@@ -5,17 +5,18 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 
-import CreateQuestion from '../pages/admin/Quiz/CreateQuestion';
-import HomePage from '../pages/home';
-import MyLibrary from '../pages/admin/MyLibrary';
-import PreQuiz from '../pages/join/Quiz';
-import QuizEdit from '../pages/admin/Quiz/Edit';
-import QuizLists from '../pages/admin/Quiz/Lists/Lists';
-import QuizizzGame from '../pages/join/Game';
-import Setting from '../pages/join/Setting/Setting';
-import Toppic from '../pages/join/Topic';
+import CreateByMe from '@/pages/admin/Quiz/CreateByMe';
+import CreateQuestion from '@/pages/admin/Quiz/CreateQuestion';
+import HomePage from '@/pages/home';
+import MyLibrary from '@/pages/admin/MyLibrary';
+import PreQuiz from '@/pages/join/Quiz';
+import QuizEdit from '@/pages/admin/Quiz/Edit';
+import QuizLists from '@/pages/admin/Quiz/Lists/Lists';
+import QuizizzGame from '@/pages/join/Game';
+import Setting from '@/pages/join/Setting/Setting';
+import Toppic from '@/pages/join/Topic';
 import { useEffect } from 'react';
-import { userStore } from '../store/userStore';
+import { userStore } from '@/store/userStore';
 
 const PrivateRoute = ({ isAuth }: any) => {
 	const { user } = userStore((state) => state);
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
 					{ path: 'lists/:id', element: <QuizLists /> },
 					{ path: 'edit/:id', element: <QuizEdit /> },
 					{ path: 'questions/create/:id', element: <CreateQuestion /> },
+					{ path: ':id', element: <CreateByMe /> },
 				],
 			},
 		],
