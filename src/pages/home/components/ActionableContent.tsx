@@ -3,10 +3,6 @@ import { userStore } from '../../../store/userStore';
 
 const ActionableContent = () => {
 	const { user } = userStore((state) => state);
-	console.log(
-		'🚀 ~ file: ActionableContent.tsx:6 ~ ActionableContent ~ user:',
-		user
-	);
 	return (
 		<div className="lg:p-7 p-4">
 			<div className="gap-7 flex items-center justify-between">

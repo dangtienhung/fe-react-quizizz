@@ -6,18 +6,18 @@ import Header from '../components/Header';
 import Skeleton from 'react-loading-skeleton';
 import { VscDebugStart } from 'react-icons/vsc';
 import { useEffect } from 'react';
-import { useQuizizzStore } from '../../../store/quizizzStore';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 
 const PreQuiz = () => {
 	const { id } = useParams<{ id: string }>();
-	const { quizizz, getOneQuizizz, isLoading } = useQuizizzStore(
+	const { quizizzExam, getOneQuizizzExam, isLoading } = useQuizizzExamStore(
 		(state) => state
 	);
 	useEffect(() => {
 		if (id) {
-			getOneQuizizz(id);
+			getOneQuizizzExam(id);
 		}
-	}, [getOneQuizizz, id]);
+	}, [getOneQuizizzExam, id]);
 	return (
 		<div className="min-h-screen bg-black">
 			<Header />
@@ -31,27 +31,26 @@ const PreQuiz = () => {
 								<div className="flex items-start w-full gap-3">
 									<img
 										src={
-											quizizz.image ||
 											'https://cf.quizizz.com/img/logos/new/logo_placeholder_sm.png?w=200&h=200'
 										}
-										alt={quizizz.title}
+										alt={quizizzExam.title}
 										className="w-[56px] h-[56px] rounded-xl object-cover"
 										width={56}
 										height={56}
 									/>
 									<div className="w-full overflow-hidden">
 										<p className="text-lg font-medium truncate">
-											{quizizz.title}
+											{quizizzExam.title}
 										</p>
 										<span className="text-sm">
-											{quizizz.questions.length} Qs
+											{quizizzExam?.questions?.length} Qs
 										</span>
 									</div>
 								</div>
 								<div className="mt-4">
 									<span className="inline-flex items-center gap-3">
 										<BiUserCheck size={20} />
-										<span>Qua: {quizizz.user.name}</span>
+										<span>Qua: đặng tiến hưng</span>
 									</span>
 								</div>
 							</div>
@@ -59,7 +58,7 @@ const PreQuiz = () => {
 						<div className="w-[50%]">
 							<div className="p-6 bg-[#111111] rounded-xl">
 								<Link
-									to={`/join/game/${quizizz._id}?type=solo`}
+									to={`/join/game/${quizizzExam._id}?type=solo`}
 									className="inline-block w-full"
 								>
 									<button

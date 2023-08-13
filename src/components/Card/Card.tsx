@@ -1,10 +1,15 @@
 import { HiUserGroup } from 'react-icons/hi';
+import { IQuizizzExam } from '@/interfaces/quizizzExam.type';
 import { Link } from 'react-router-dom';
 import { Modal } from 'flowbite-react';
 import { VscDebugStart } from 'react-icons/vsc';
 import { useState } from 'react';
 
-const Card = () => {
+interface CardProps {
+	quizizzExam: IQuizizzExam;
+}
+
+const Card = ({ quizizzExam }: CardProps) => {
 	const [openModal, setOpenModal] = useState<string | undefined>();
 	const props = { openModal, setOpenModal };
 
@@ -16,20 +21,19 @@ const Card = () => {
 			>
 				<div className="relative h-[126px]">
 					<img
-						src="https://i.ytimg.com/vi/zEkmo_jtLus/maxresdefault.jpg"
-						alt="image"
+						src="https://yeudayhoc.com/wp-content/uploads/2022/01/8-1.png"
+						alt={quizizzExam.title}
 						className="object-cover w-full h-full rounded-t-lg"
 					/>
 					<div className="bottom-2 left-2 absolute">
 						<div className="text-xs bg-[#f2f2f2] shadow text-[#292a3a] text-center rounded py-[1px] px-[6px]">
-							20 Qs
+							{quizizzExam.questions.length} Qs
 						</div>
 					</div>
 				</div>
 				<div className="p-3">
 					<h2 className="line-clamp-2 text-base font-medium capitalize">
-						Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum
-						dolor sit amet.
+						{quizizzExam.title}
 					</h2>
 				</div>
 			</div>
@@ -45,13 +49,13 @@ const Card = () => {
 					style={{ width: '100%' }}
 				>
 					<img
-						src="https://i.ytimg.com/vi/zEkmo_jtLus/maxresdefault.jpg"
+						src="https://yeudayhoc.com/wp-content/uploads/2022/01/8-1.png"
 						alt="image"
 						className="object-cover w-full h-full rounded-t-lg"
 					/>
 					<div className="bottom-2 left-2 absolute">
 						<div className="text-xs bg-[#f2f2f2] shadow text-[#292a3a] text-center rounded py-[1px] px-[6px]">
-							20 Qs
+							{quizizzExam.questions.length} Qs
 						</div>
 					</div>
 				</div>
@@ -62,7 +66,7 @@ const Card = () => {
 					</h2>
 					<div className="flex items-center justify-start gap-2 my-4">
 						<img
-							src="https://i.ytimg.com/vi/zEkmo_jtLus/maxresdefault.jpg"
+							src="https://yeudayhoc.com/wp-content/uploads/2022/01/8-1.png"
 							alt="image-avatar"
 							className="h-[24px] w-[24px] rounded-full object-cover"
 							height={24}
@@ -71,7 +75,10 @@ const Card = () => {
 						<span className="">Đặng Tiến Hưng</span>
 					</div>
 					<div className="flex items-center justify-between gap-4">
-						<Link to={`/join/quiz/ahihi`} className="inline-block w-full">
+						<Link
+							to={`/join/quiz/${quizizzExam._id}`}
+							className="inline-block w-full border-none outline-none"
+						>
 							<button className="btn bg-primary hover:bg-primary w-full text-white border-0 outline-none">
 								<span>Thực hành</span>
 								<VscDebugStart size={20} />

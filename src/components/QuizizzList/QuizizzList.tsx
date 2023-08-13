@@ -1,7 +1,15 @@
 import Card from '../Card/Card';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 
 const QuizizzList = () => {
+	const { quizizzExams, getQuizizzExams } = useQuizizzExamStore(
+		(state) => state
+	);
+	useEffect(() => {
+		getQuizizzExams();
+	}, []);
 	return (
 		<div className="mt-[44px]">
 			<div className="flex items-center justify-between mb-2">
@@ -14,11 +22,11 @@ const QuizizzList = () => {
 				</Link>
 			</div>
 			<div className="md:grid-cols-4 lg:grid-cols-5 grid grid-cols-2 gap-4">
-				<Card />
-				<Card />
-				<Card />
-				<Card />
-				<Card />
+				{quizizzExams &&
+					quizizzExams.length > 0 &&
+					quizizzExams.map((quizizzExam) => (
+						<Card key={quizizzExam._id} quizizzExam={quizizzExam} />
+					))}
 			</div>
 		</div>
 	);
