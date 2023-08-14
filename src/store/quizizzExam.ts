@@ -1,8 +1,15 @@
+import {
+	IQuizizzExam,
+	IQuizizzExamCreate,
+} from '@/interfaces/quizizzExam.type';
 import { IQuizizzExamAction, IQuizizzExamState } from './types/quizizzExam';
+import {
+	createQuizizzExam,
+	getAllQuizExam,
+	getOneQuizExam,
+} from '@/api/quizExam';
 import { devtools, persist } from 'zustand/middleware';
-import { getAllQuizExam, getOneQuizExam } from '@/api/quizExam';
 
-import { IQuizizzExam } from '@/interfaces/quizizzExam.type';
 import { create } from 'zustand';
 
 export const useQuizizzExamStore = create<
@@ -34,6 +41,22 @@ export const useQuizizzExamStore = create<
 						set({ isLoading: false });
 						const data = await getOneQuizExam(id);
 						set({ quizizzExam: data });
+					} catch (error: any) {
+						set({ isLoading: false });
+						set({ error: error.response.data.message });
+					}
+				},
+				/* create quiz exam */
+				createQuizizzExam: async (data: IQuizizzExamCreate) => {
+					set({ isLoading: true });
+					try {
+						set({ isLoading: false });
+						const response = await createQuizizzExam(data);
+						console.log(
+							'🚀 ~ file: quizizzExam.ts:51 ~ createQuizizzExam: ~ response:',
+							response
+						);
+						set({ quizizzExam: response.data });
 					} catch (error: any) {
 						set({ isLoading: false });
 						set({ error: error.response.data.message });

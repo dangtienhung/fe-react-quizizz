@@ -1,19 +1,43 @@
 import { AiFillSave, AiFillSetting } from 'react-icons/ai';
+import {
+	Button,
+	CustomFlowbiteTheme,
+	Dropdown,
+	Label,
+	Modal,
+	TextInput,
+} from 'flowbite-react';
 
 import { BsPlusSquareFill } from 'react-icons/bs';
+import { IQuizizzs } from '@/interfaces/quizizz.type';
 import { Link } from 'react-router-dom';
-import { Modal } from 'flowbite-react';
 import { VscDebugStart } from 'react-icons/vsc';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 import { useState } from 'react';
 
 interface HeaderProps {
 	children?: React.ReactNode;
 	className?: string;
+	quizizz?: IQuizizzs;
 }
 
-const Header = ({ className }: HeaderProps) => {
+const Header = ({ className, quizizz }: HeaderProps) => {
+	const { createQuizizzExam } = useQuizizzExamStore((state) => state);
 	const [openModal, setOpenModal] = useState<string | undefined>();
+	const [title, setTitle] = useState<string>('');
 	const props = { openModal, setOpenModal };
+
+	/* xuất bản chương trình */
+	const handlePublish = () => {
+		if (quizizz) {
+			setOpenModal(undefined);
+			createQuizizzExam({
+				title,
+				questions: [quizizz._id],
+				user: [quizizz.user._id],
+			});
+		}
+	};
 	return (
 		<>
 			<div
@@ -34,7 +58,7 @@ const Header = ({ className }: HeaderProps) => {
 					<div className="absolute top-1/2 -translate-y-1/2 -left-6 h-8 w-[2px] z-50 bg-[#B6B6B6]"></div>
 					<div className="flex-1">
 						<button className="rounded px-2 py-1 font-medium outline-none border-none hover:bg-[#F2F2F2]">
-							Bài quiz không có tiêu đề
+							{title === '' ? 'Bài quiz không có tiêu đề' : title}
 						</button>
 					</div>
 					<div className="flex items-center gap-2">
@@ -60,19 +84,54 @@ const Header = ({ className }: HeaderProps) => {
 				onClose={() => props.setOpenModal(undefined)}
 			>
 				<Modal.Body>
-					<div className="grid w-full grid-cols-2 gap-5">
-						<div className="">
-							Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
-							nemo voluptatum, accusamus quisquam minus praesentium illum
-							exercitationem recusandae perferendis fugiat laborum iste nostrum
-							eius aspernatur ut obcaecati? Commodi, quas aliquid.
+					<form className="grid w-full grid-cols-2 gap-5">
+						<div>
+							<div className="mb-8">
+								<div className="mb-2 block">
+									<Label htmlFor="" value="Tiêu đề" />
+								</div>
+								<TextInput
+									placeholder="Tiêu đề bài biết"
+									required
+									type="text"
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+								/>
+							</div>
+							<div className="">
+								<div className="w-full">
+									<div className="mb-2 block">
+										<Label htmlFor="" value="Hiện thị" />
+									</div>
+									<Dropdown
+										label="Công khai hiện thị với mọi người"
+										target="w-full"
+										className=""
+										style={{ width: '100%' }}
+									>
+										<Dropdown.Item value="1" className="w-full">
+											Công khai, hiện thị với mọi người
+										</Dropdown.Item>
+										<Dropdown.Item value="1" className="w-full">
+											Riêng tư, chỉ mình tôi
+										</Dropdown.Item>
+									</Dropdown>
+								</div>
+							</div>
 						</div>
 						<div className="flex items-center justify-center">
 							<div className="h-[284px] w-[284px] text-[#818181] bg-[#F9F9F9] flex justify-center items-center rounded-lg border-solid">
 								<BsPlusSquareFill size={36} />
 							</div>
 						</div>
-					</div>
+						<div></div>
+						<Button
+							style={{ width: 'fit-content', marginLeft: 'auto' }}
+							onClick={() => handlePublish()}
+						>
+							Xuất bản
+						</Button>
+					</form>
 				</Modal.Body>
 			</Modal>
 		</>

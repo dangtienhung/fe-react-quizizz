@@ -1,3 +1,5 @@
+import { IUser } from './user.type';
+
 export interface IQuizizzsAnswer {
 	_id: string;
 	content: string;
@@ -28,4 +30,12 @@ export interface IQuizizzExam {
 	endDate: string;
 	createdAt: string;
 	updatedAt: string;
+}
+
+/* create */
+export interface IQuizizzExamCreate {
+	title: string;
+	questions: string[];
+	thumbnail?: string;
+	user: string[];
 }

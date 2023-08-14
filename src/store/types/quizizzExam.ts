@@ -1,4 +1,7 @@
-import { IQuizizzExam } from '@/interfaces/quizizzExam.type';
+import {
+	IQuizizzExam,
+	IQuizizzExamCreate,
+} from '@/interfaces/quizizzExam.type';
 
 export type IQuizizzExamState = {
 	quizizzExams: IQuizizzExam[];
@@ -12,4 +15,6 @@ export type IQuizizzExamAction = {
 	getQuizizzExams: () => void;
 	/* get one */
 	getOneQuizizzExam: (id: string) => void;
+	/* create quiz exam */
+	createQuizizzExam: (data: IQuizizzExamCreate) => void;
 };
