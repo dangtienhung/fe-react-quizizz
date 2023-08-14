@@ -3,17 +3,17 @@ export interface IQuizizzsAnswer {
 	content: string;
 }
 
+export interface IQuizizzsQuestion {
+	_id: string;
+	title: string;
+	score: number;
+	questionAnswers: IQuizizzsAnswer[];
+	timer: number;
+}
+
 export interface IQuizizzQuestionExam {
 	_id: string;
-	questions: [
-		{
-			_id: string;
-			title: string;
-			score: number;
-			questionAnswers: IQuizizzsAnswer[];
-			timer: number;
-		}
-	];
+	questions: IQuizizzsQuestion[];
 }
 
 export interface IQuizizzExam {

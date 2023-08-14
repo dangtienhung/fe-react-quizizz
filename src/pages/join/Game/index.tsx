@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import GameSolo from './components/GameSolo';
 import Summary from './components/Summary';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 import { useQuizizzStore } from '@/store/quizizzStore';
 
 enum GameType {
@@ -14,7 +15,9 @@ const QuizizzGame = () => {
 	const [searchParams] = useSearchParams();
 	const [gameType, setGameType] = useState<GameType>(GameType.SOLO);
 	const { id } = useParams();
-	const { quizizz, getOneQuizizz } = useQuizizzStore((state) => state);
+	const { quizizzExam, getOneQuizizzExam } = useQuizizzExamStore(
+		(state) => state
+	);
 	useEffect(() => {
 		const type = searchParams.get('type');
 		if (type) {
@@ -23,13 +26,13 @@ const QuizizzGame = () => {
 	}, [searchParams]);
 	useEffect(() => {
 		if (id) {
-			getOneQuizizz(id);
+			getOneQuizizzExam(id);
 		}
-	}, [getOneQuizizz, id]);
+	}, [getOneQuizizzExam, id]);
 	if (gameType === GameType.SUMMARY) {
 		return <Summary />;
 	}
-	return <GameSolo questions={quizizz.questions} />;
+	return <GameSolo questions={quizizzExam.questions} />;
 };
 
 export default QuizizzGame;
