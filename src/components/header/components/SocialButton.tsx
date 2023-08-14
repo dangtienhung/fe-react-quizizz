@@ -9,7 +9,6 @@ interface SocialButtonProps {
 
 export default function SocialButton({
 	className,
-	children,
 	imgSrc,
 	title,
 }: SocialButtonProps) {

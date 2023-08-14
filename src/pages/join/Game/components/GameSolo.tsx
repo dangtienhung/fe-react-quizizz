@@ -23,8 +23,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 	const [socket, setSocket] = useState<any>(null);
 	const [quetionsList, setQuestionsList] = useState<IQuizizzsQuestion[]>([]);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [score, setScore] = useState(0);
-	const [showScore, setShowScore] = useState(false);
 	useEffect(() => {
 		const questionList = questions.flat().map((question) => {
 			const { questions } = question;
@@ -45,6 +43,10 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 
 	/* sử lý sự kiện chọn đáp án */
 	const handleAnswerOptionClick = (id: string) => {
+		console.log(
+			'🚀 ~ file: GameSolo.tsx:46 ~ handleAnswerOptionClick ~ id:',
+			id
+		);
 		socket.emit('answerSubmitted', {
 			userId: 'ahihi',
 			quizizzExamQuestionId: 'quizizzExamQuestionId',
@@ -53,8 +55,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < quetionsList.length) {
 			setCurrentQuestion(nextQuestion);
-		} else {
-			setShowScore(true);
 		}
 	};
 

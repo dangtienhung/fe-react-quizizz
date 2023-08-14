@@ -9,7 +9,7 @@ import { userStore } from '../../../../store/userStore';
 const ListQuizizz = () => {
 	const navigate = useNavigate();
 	const { user } = userStore((state) => state);
-	const { isFetching, data } = useQuery({
+	const { data } = useQuery({
 		queryKey: ['students'],
 		queryFn: () => getQuizs(user._id),
 		keepPreviousData: true,

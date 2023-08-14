@@ -1,9 +1,9 @@
 import { AiOutlineSearch, AiOutlineSetting } from 'react-icons/ai';
 import { Dropdown, TextInput } from 'flowbite-react';
-import { useState } from 'react';
 
 import { BsBell } from 'react-icons/bs';
 import { VscLibrary } from 'react-icons/vsc';
+import { useState } from 'react';
 
 const menus = [
 	{ id: 1, name: 'Thư viện của tôi', icon: <VscLibrary /> },
@@ -11,7 +11,7 @@ const menus = [
 ];
 
 const Header = () => {
-	const [isSelected, setIsSelected] = useState<number>(0);
+	const [isSelected] = useState<number>(0);
 	return (
 		<div className="h-14 flex items-center justify-between w-full gap-5 p-2 bg-white shadow">
 			<div className="flex items-center justify-between w-full">

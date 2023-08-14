@@ -10,7 +10,7 @@ interface LayoutAdminProps {
 
 const LayoutAdmin = ({ children }: LayoutAdminProps) => {
 	const [searchParams] = useSearchParams();
-	const [createByMe, setCreateByMe] = useState<boolean>(false);
+	const [, setCreateByMe] = useState<boolean>(false);
 	useEffect(() => {
 		const type = searchParams.get('createByMe');
 		if (type) {

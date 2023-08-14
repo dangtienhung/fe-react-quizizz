@@ -1,5 +1,3 @@
-import { IUser } from './user.type';
-
 export interface IQuizizzsAnswer {
 	_id: string;
 	content: string;

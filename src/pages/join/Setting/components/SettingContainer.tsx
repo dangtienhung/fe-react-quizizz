@@ -1,8 +1,7 @@
-import { Button, Modal } from 'flowbite-react';
 import React, { useState } from 'react';
 
 import { IoIosArrowForward } from 'react-icons/io';
-import { v4 as uuidv4 } from 'uuid';
+import { Modal } from 'flowbite-react';
 
 interface SettingContainerProps {
 	icon: React.ReactNode;

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const QuestionReview = () => {
 	return (
 		<div className="bg-[#f2f2f2] text-sm p-4 rounded-lg mb-3 text-left">

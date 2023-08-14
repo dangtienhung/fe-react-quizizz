@@ -1,17 +1,12 @@
-import LayoutDefault from '../../../layouts/LayoutDefault';
-import SettingContainer from './components/SettingContainer';
 import { FaUserCircle, FaUserEdit } from 'react-icons/fa';
 
 import { IoIosArrowForward } from 'react-icons/io';
+import LayoutDefault from '../../../layouts/LayoutDefault';
+import SettingContainer from './components/SettingContainer';
+
 const info = [
 	{ title: 'Hình đại diện', content: 'parry pirate' },
 	{ title: 'Hình đại diện', content: 'parry pirate' },
-];
-
-const account = [
-	{ title: 'Cập nhật mật khẩu' },
-	{ title: 'Xóa tài khoản' },
-	{ title: 'Đăng xuất' },
 ];
 
 const Setting = () => {

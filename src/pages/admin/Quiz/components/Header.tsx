@@ -1,12 +1,5 @@
 import { AiFillSave, AiFillSetting } from 'react-icons/ai';
-import {
-	Button,
-	CustomFlowbiteTheme,
-	Dropdown,
-	Label,
-	Modal,
-	TextInput,
-} from 'flowbite-react';
+import { Button, Dropdown, Label, Modal, TextInput } from 'flowbite-react';
 
 import { BsPlusSquareFill } from 'react-icons/bs';
 import { IQuizizzs } from '@/interfaces/quizizz.type';

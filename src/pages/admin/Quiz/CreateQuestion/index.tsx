@@ -126,7 +126,7 @@ const CreateQuestion = () => {
 		if (questionType === QuestionType.SINGLE) {
 			setAnswers((prev) => {
 				const updatedAnswers = [...prev];
-				updatedAnswers.forEach((answer, i) => {
+				updatedAnswers.forEach((_, i) => {
 					if (i === 0) {
 						updatedAnswers[i].isCorrect = true;
 					} else {

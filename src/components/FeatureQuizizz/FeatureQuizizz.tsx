@@ -5,7 +5,7 @@ interface FeatureQuizizzProps {
 	children?: React.ReactNode;
 	className?: string;
 }
-const FeatureQuizizz = ({ children, className }: FeatureQuizizzProps) => {
+const FeatureQuizizz = ({ className }: FeatureQuizizzProps) => {
 	return (
 		<div className={`p-4 md:p-7 ${className}`}>
 			<QuizizzList />

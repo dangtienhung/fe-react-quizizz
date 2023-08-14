@@ -1,5 +1,4 @@
 import { EStatus } from './enum';
-import { IAnswer } from './answer.type';
 import { IQuizizzQuestion } from './question.type';
 import { IUser } from './user.type';
 

@@ -1,8 +1,4 @@
-import {
-	IQuizizzQuestionExam,
-	IQuizizzsAnswer,
-	IQuizizzsQuestion,
-} from '@/interfaces/quizizzExam.type';
+import { IQuizizzsAnswer } from '@/interfaces/quizizzExam.type';
 
 interface CardGameProps {
 	className?: string;
