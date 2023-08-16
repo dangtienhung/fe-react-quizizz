@@ -22,6 +22,8 @@ const cardGameList = [
 ];
 
 const GameSolo = ({ questions }: GameSoloProps) => {
+	let cardClasses =
+		'rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95';
 	const [socket, setSocket] = useState<any>(null);
 	const [quetionsList, setQuestionsList] = useState<IQuizizzsQuestion[]>([]);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -30,7 +32,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		id: string;
 		index: number;
 	}>(null as any);
-	const [isCorrect, setIsCorrect] = useState(false);
 
 	const { user } = userStore((state) => state);
 	useEffect(() => {
@@ -56,7 +57,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		socket.on('answerResult', (data: AnswerResult) => {
 			if (selectAnswer) {
 				const result = data.answer._id === selectAnswer.id;
-				setIsCorrect(result);
 				setAnswerResult(data);
 			}
 			setTimeout(() => {
@@ -66,11 +66,9 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 				}
 				setAnswerResult(null as any);
 				setSelectAnswer(null as any);
-				setIsCorrect(false);
 			}, 2000);
 		});
 		return () => {
-			// Hủy đăng ký sự kiện khi component unmount
 			socket.off('answerResult');
 		};
 	}, [socket, selectAnswer]);
@@ -90,19 +88,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 			quizizzExamQuestionId: quetionsList[currentQuestion]?._id,
 			quizizzExamQuestionAnswerId: id,
 		});
-		// if (answerResult !== null) {
-		// 	if (answerResult.answer._id === id) {
-		// 		if (answerResult.result === true) {
-		// 			cardGameList[index].bgColor = '#62C370';
-		// 			cardGameList[index].boxShadow = '#62C370';
-		// 		}
-		// 	} else {
-		// 		if (isCorrect === false) {
-		// 			cardGameList[index].bgColor = '#D4546A';
-		// 			cardGameList[index].boxShadow = '#BA2F47';
-		// 		}
-		// 	}
-		// }
 	};
 
 	if (!quetionsList.length) return null;
@@ -120,16 +105,56 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 					</div>
 					<div className="h-1/2 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-1 gap-4">
 						{quetionsList[currentQuestion].questionAnswers.map(
-							(card, index) => (
-								<CardGame
-									index={index}
-									card={card}
-									key={card._id}
-									isCorrect={isCorrect}
-									handleAnswerOptionClick={handleAnswerOptionClick}
-									answerResult={answerResult}
-								/>
-							)
+							(card, index) => {
+								if (selectAnswer === null) {
+									return (
+										<div
+											key={card._id}
+											className={`${cardClasses}`}
+											style={{
+												boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
+												backgroundColor: `${cardGameList[index].bgColor}`,
+											}}
+											onClick={() =>
+												handleAnswerOptionClick({ id: card._id, index })
+											}
+										>
+											<div
+												className={`flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
+											>
+												{card.content}
+											</div>
+										</div>
+									);
+								}
+								if (selectAnswer !== null && answerResult) {
+									return (
+										<div
+											key={card._id}
+											className={`${cardClasses} ${
+												selectAnswer.index === index ? 'block' : 'invisible'
+											}`}
+											style={{
+												boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
+												backgroundColor: `${cardGameList[index].bgColor}`,
+											}}
+											onClick={() =>
+												handleAnswerOptionClick({ id: card._id, index })
+											}
+										>
+											<div
+												className={`${
+													selectAnswer.id === answerResult?.answer?._id
+														? 'bg-green-500'
+														: 'bg-red-500'
+												} flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
+											>
+												{card.content}
+											</div>
+										</div>
+									);
+								}
+							}
 						)}
 					</div>
 				</div>
@@ -139,3 +164,12 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 };
 
 export default GameSolo;
+
+// <CardGame
+// 	index={index}
+// 	card={card}
+// 	key={card._id}
+// 	isCorrect={isCorrect}
+// 	handleAnswerOptionClick={handleAnswerOptionClick}
+// 	answerResult={answerResult}
+// />
