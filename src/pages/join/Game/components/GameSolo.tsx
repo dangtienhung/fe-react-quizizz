@@ -1,13 +1,11 @@
-import {
-	IQuizizzQuestionExam,
-	IQuizizzsQuestion,
-} from '@/interfaces/quizizzExam.type';
 import { useEffect, useState } from 'react';
 
 import { AnswerResult } from '../interface/answerResult';
 import CardGame from './CardGame';
 import Header from '../../components/Header';
+import { IQuizizzQuestionExam } from '@/interfaces/quizizzExam.type';
 import { io } from 'socket.io-client';
+import { useGameSolo } from '@/store/gameStore';
 import { userStore } from '@/store/userStore';
 
 interface GameSoloProps {
@@ -25,14 +23,12 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 	let cardClasses =
 		'rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95';
 	const [socket, setSocket] = useState<any>(null);
-	const [quetionsList, setQuestionsList] = useState<IQuizizzsQuestion[]>([]);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [answerResult, setAnswerResult] = useState<AnswerResult>(null as any);
-	const [selectAnswer, setSelectAnswer] = useState<{
-		id: string;
-		index: number;
-	}>(null as any);
-
+	const {
+		questions: quetionsList,
+		answerResult,
+		selectAnswer,
+	} = useGameSolo((state) => state);
 	const { user } = userStore((state) => state);
 	useEffect(() => {
 		const questionList = questions.flat().map((question) => {
@@ -40,7 +36,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 			const result = questions.map((question) => question);
 			return result;
 		});
-		setQuestionsList(questionList.flat());
+		useGameSolo.setState({ questions: questionList.flat() });
 	}, [questions]);
 
 	/* connect socket */
@@ -56,16 +52,20 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		if (!socket) return;
 		socket.on('answerResult', (data: AnswerResult) => {
 			if (selectAnswer) {
-				const result = data.answer._id === selectAnswer.id;
-				setAnswerResult(data);
+				useGameSolo.setState({ answerResult: data });
 			}
 			setTimeout(() => {
 				const nextQuestion = currentQuestion + 1;
 				if (nextQuestion < quetionsList.length) {
 					setCurrentQuestion(nextQuestion);
 				}
-				setAnswerResult(null as any);
-				setSelectAnswer(null as any);
+				useGameSolo.setState({
+					answerResult: null as any,
+					selectAnswer: null as any,
+				});
+				if (nextQuestion === quetionsList.length) {
+					alert('msg');
+				}
 			}, 2000);
 		});
 		return () => {
@@ -82,7 +82,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		index: number;
 	}) => {
 		const data = { id, index };
-		setSelectAnswer(data);
+		useGameSolo.setState({ selectAnswer: data });
 		socket.emit('answerSubmitted', {
 			userId: user._id,
 			quizizzExamQuestionId: quetionsList[currentQuestion]?._id,
@@ -93,7 +93,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 	if (!quetionsList.length) return null;
 	return (
 		<div className="flex flex-col h-screen bg-black select-none">
-			<Header />
+			<Header quetionsList={quetionsList} currentQuestion={currentQuestion} />
 			<div className="flex-1 p-2">
 				<div className="bg-[#461A42] h-full rounded-2xl p-2">
 					<div className="h-1/2">
@@ -127,16 +127,24 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 										</div>
 									);
 								}
-								if (selectAnswer !== null && answerResult) {
+								if (selectAnswer !== null && (answerResult as AnswerResult)) {
 									return (
 										<div
 											key={card._id}
 											className={`${cardClasses} ${
-												selectAnswer.index === index ? 'block' : 'invisible'
+												selectAnswer.index === index
+													? 'block'
+													: answerResult?.answer._id === card._id
+													? 'block'
+													: 'invisible'
 											}`}
 											style={{
 												boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
-												backgroundColor: `${cardGameList[index].bgColor}`,
+												backgroundColor: `${
+													answerResult?.answer._id === card._id
+														? '#2C9CA6'
+														: cardGameList[index].bgColor
+												}`,
 											}}
 											onClick={() =>
 												handleAnswerOptionClick({ id: card._id, index })
@@ -146,7 +154,10 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 												className={`${
 													selectAnswer.id === answerResult?.answer?._id
 														? 'bg-green-500'
-														: 'bg-red-500'
+														: selectAnswer.id !== answerResult?.answer?._id &&
+														  selectAnswer.id === card._id
+														? 'bg-red-500'
+														: 'bg-green-500'
 												} flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
 											>
 												{card.content}
