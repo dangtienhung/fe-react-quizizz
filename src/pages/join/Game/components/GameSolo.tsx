@@ -34,12 +34,14 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 	} = useGameSolo((state) => state);
 	const { user } = userStore((state) => state);
 	useEffect(() => {
-		const questionList = questions.flat().map((question) => {
+		const questionList = questions?.flat()?.map((question) => {
 			const { questions } = question;
 			const result = questions.map((question) => question);
 			return result;
 		});
-		useGameSolo.setState({ questions: questionList.flat() });
+		if (questionList) {
+			useGameSolo.setState({ questions: questionList.flat() });
+		}
 	}, [questions]);
 
 	// Xử lý khi nhận được kết quả từ server

@@ -1,7 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
+import { GameType } from '@/interfaces/enum';
 import { IQuizizzsQuestion } from '@/interfaces/quizizzExam.type';
 import { VscClose } from 'react-icons/vsc';
+import { useGameType } from '@/hooks/useGameType';
 
 interface HeaderProps {
 	quetionsList?: IQuizizzsQuestion[];
@@ -10,10 +13,15 @@ interface HeaderProps {
 
 const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
 	const { id } = useParams();
+	const gameType = useGameType();
+	console.log('🚀 ~ file: Header.tsx:17 ~ Header ~ gameType:', gameType);
 	return (
 		<div className="h-16 w-full flex justify-between items-center p-4 bg-[#000]">
 			<div className="flex items-center gap-4">
-				<Link to={`/join/quiz/${id}`} className="inline-block">
+				<Link
+					to={gameType && id ? `/join/quiz/${id}` : '/'}
+					className="inline-block"
+				>
 					<div className="cursor-pointer h-10 w-10 rounded-lg !text-white flex justify-center items-center bg-[#333]">
 						<VscClose size={20} />
 					</div>

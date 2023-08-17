@@ -2,20 +2,16 @@ import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import GameSolo from './components/GameSolo';
+import { GameType } from '@/interfaces/enum';
 import Summary from './components/Summary';
+import { useGameType } from '@/hooks/useGameType';
 import { useQuizizzExamStore } from '@/store/quizizzExam';
 import { useSocket } from '@/hooks/useSocket';
 import { userStore } from '@/store/userStore';
 
-enum GameType {
-	SOLO = 'solo',
-	SUMMARY = 'summary',
-}
-
 const QuizizzGame = () => {
-	const [searchParams] = useSearchParams();
-	const [gameType, setGameType] = useState<GameType>(GameType.SOLO);
 	const { id } = useParams();
+	const gameType = useGameType();
 	/* store */
 	const { quizizzExam, getOneQuizizzExam } = useQuizizzExamStore(
 		(state) => state
@@ -29,12 +25,7 @@ const QuizizzGame = () => {
 		/* gửi id phòng quiz đang chơi lên server */
 		socket.emit('joinRoom', { roomId: id, useId: user._id });
 	}, [socket, id]);
-	useEffect(() => {
-		const type = searchParams.get('type');
-		if (type) {
-			setGameType(type as GameType);
-		}
-	}, [searchParams]);
+
 	useEffect(() => {
 		if (id) {
 			getOneQuizizzExam(id);
