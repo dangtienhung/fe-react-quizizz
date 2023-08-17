@@ -1,6 +1,5 @@
 import { AnswerResult } from '../interface/answerResult';
 import { IQuizizzsAnswer } from '@/interfaces/quizizzExam.type';
-import { useState } from 'react';
 
 interface CardGameProps {
 	className?: string;

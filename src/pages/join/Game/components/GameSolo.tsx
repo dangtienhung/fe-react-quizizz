@@ -1,10 +1,7 @@
-import { useEffect, useState } from 'react';
-
 import { AnswerResult } from '../interface/answerResult';
-import CardGame from './CardGame';
 import Header from '../../components/Header';
 import { IQuizizzQuestionExam } from '@/interfaces/quizizzExam.type';
-import { io } from 'socket.io-client';
+import { useEffect } from 'react';
 import { useGameSolo } from '@/store/gameStore';
 import { useSocket } from '@/hooks/useSocket';
 import { userStore } from '@/store/userStore';
@@ -27,9 +24,6 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 		'rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95';
 	/* connect socket */
 	const socket = useSocket();
-	/* state */
-	// const [currentQuestion, setCurrentQuestion] = useState(0);
-
 	/* store */
 	const {
 		questions: quetionsList,
