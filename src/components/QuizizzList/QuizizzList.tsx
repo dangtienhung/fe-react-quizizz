@@ -1,15 +1,12 @@
 import Card from '../Card/Card';
+import { IQuizizzExam } from '@/interfaces/quizizzExam.type';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useQuizizzExamStore } from '@/store/quizizzExam';
 
-const QuizizzList = () => {
-	const { quizizzExams, getQuizizzExams } = useQuizizzExamStore(
-		(state) => state
-	);
-	useEffect(() => {
-		getQuizizzExams();
-	}, []);
+interface QuizizzListProps {
+	quizizzExams: IQuizizzExam[];
+}
+
+const QuizizzList = ({ quizizzExams }: QuizizzListProps) => {
 	return (
 		<div className="mt-[44px]">
 			<div className="flex items-center justify-between mb-2">

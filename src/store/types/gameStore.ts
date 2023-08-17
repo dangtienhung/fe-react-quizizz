@@ -7,9 +7,9 @@ export type GameStoreState = {
 	questions: IQuizizzsQuestion[];
 	selectAnswer: null | SelectAnswer;
 	answerResult: null | AnswerResult;
+	currentQuestion: number;
 };
 
 export type GameStoreAction = {
-	type: 'SET_QUESTIONS';
-	payload: IQuizizzsQuestion[];
+	setCurrentQuestion: (newQuestion: number) => void;
 };

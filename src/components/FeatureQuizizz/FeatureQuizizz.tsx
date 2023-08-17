@@ -1,16 +1,22 @@
+import React, { useEffect } from 'react';
+
 import QuizizzList from '../QuizizzList/QuizizzList';
-import React from 'react';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 
 interface FeatureQuizizzProps {
 	children?: React.ReactNode;
 	className?: string;
 }
 const FeatureQuizizz = ({ className }: FeatureQuizizzProps) => {
+	const { quizizzExams, getQuizizzExams } = useQuizizzExamStore(
+		(state) => state
+	);
+	useEffect(() => {
+		getQuizizzExams();
+	}, []);
 	return (
 		<div className={`p-4 md:p-7 ${className}`}>
-			<QuizizzList />
-			<QuizizzList />
-			<QuizizzList />
+			<QuizizzList quizizzExams={quizizzExams} />
 		</div>
 	);
 };

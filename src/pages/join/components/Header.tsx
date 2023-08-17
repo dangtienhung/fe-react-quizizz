@@ -4,8 +4,8 @@ import { IQuizizzsQuestion } from '@/interfaces/quizizzExam.type';
 import { VscClose } from 'react-icons/vsc';
 
 interface HeaderProps {
-	quetionsList: IQuizizzsQuestion[];
-	currentQuestion: number;
+	quetionsList?: IQuizizzsQuestion[];
+	currentQuestion?: number;
 }
 
 const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
@@ -23,7 +23,7 @@ const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
 				</div>
 				{quetionsList && quetionsList.length > 0 && (
 					<div className="h-10 rounded-lg !text-white px-4 flex justify-center items-center bg-[#333]">
-						{currentQuestion + 1}/{quetionsList.length}
+						{currentQuestion && currentQuestion + 1}/{quetionsList.length}
 					</div>
 				)}
 			</div>

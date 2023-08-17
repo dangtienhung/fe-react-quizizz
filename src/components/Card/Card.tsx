@@ -12,7 +12,6 @@ interface CardProps {
 const Card = ({ quizizzExam }: CardProps) => {
 	const [openModal, setOpenModal] = useState<string | undefined>();
 	const props = { openModal, setOpenModal };
-
 	return (
 		<>
 			<div
@@ -27,7 +26,7 @@ const Card = ({ quizizzExam }: CardProps) => {
 					/>
 					<div className="bottom-2 left-2 absolute">
 						<div className="text-xs bg-[#f2f2f2] shadow text-[#292a3a] text-center rounded py-[1px] px-[6px]">
-							{quizizzExam.questions.length} Qs
+							{quizizzExam.questions[0].questions.length} Qs
 						</div>
 					</div>
 				</div>
