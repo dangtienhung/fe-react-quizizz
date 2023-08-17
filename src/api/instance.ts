@@ -4,7 +4,7 @@ class Http {
 	instance: AxiosInstance;
 	constructor() {
 		this.instance = axios.create({
-			baseURL: `${import.meta.env.VITE_API_URL}/api`,
+			baseURL: `${import.meta.env.VITE_SOCKET_URL}/api`,
 			headers: {
 				'Content-Type': 'application/json',
 			},
