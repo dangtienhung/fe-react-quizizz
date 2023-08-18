@@ -22,3 +22,9 @@ export interface IUser {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export interface UserActivity {
+	_id: string;
+	name: string;
+	avatar: string;
+}

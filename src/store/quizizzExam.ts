@@ -43,7 +43,7 @@ export const useQuizizzExamStore = create<
 						set({ quizizzExam: data });
 					} catch (error: any) {
 						set({ isLoading: false });
-						set({ error: error.response.data.message });
+						set({ error: error });
 					}
 				},
 				/* create quiz exam */

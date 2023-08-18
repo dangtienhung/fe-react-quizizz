@@ -7,18 +7,21 @@ import Header from '../../components/Header';
 import { HiDatabase } from 'react-icons/hi';
 import QuestionReview from './QuestionReview';
 import QuizRecommendation from './QuizRecommendation';
-import { useEffect } from 'react';
+import { useQuizizzActivityStore } from '@/store/quizizzActivity';
 import { useQuizizzExamStore } from '@/store/quizizzExam';
 
 const Summary = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const { quizizzExams, getQuizizzExams } = useQuizizzExamStore(
-		(state) => state
-	);
-	useEffect(() => {
-		getQuizizzExams();
-	}, []);
+	const { quizizzExams } = useQuizizzExamStore((state) => state);
+	const { quizizzActivitie } = useQuizizzActivityStore((state) => state);
+	// console.log(
+	// 	'🚀 ~ file: Summary.tsx:18 ~ Summary ~ quizizzActivitie:',
+	// 	quizizzActivitie
+	// );
+	const answersCorrect = quizizzActivitie?.answers?.filter(
+		(answer) => answer.isCorrect === true
+	).length;
 	return (
 		<div className="flex flex-col bg-[#461A42] min-h-screen">
 			<Header />
@@ -40,13 +43,15 @@ const Summary = () => {
 						<div className="flex justify-between items-center px-6 mb-5 py-5 bg-[#000000] text-white rounded-xl">
 							<div className="flex items-center justify-start gap-4">
 								<img
-									src="https://staticg.sportskeeda.com/editor/2022/02/b9427-16438410040408-1920.jpg"
-									alt="name"
+									src={quizizzActivitie?.userId?.avatar}
+									alt={quizizzActivitie?.userId?.name}
 									className="w-[76px] h-[76px] rounded-full object-cover"
 									width={76}
 									height={76}
 								/>
-								<span className="text-xl font-medium text-white">me</span>
+								<span className="text-xl font-medium text-white">
+									{quizizzActivitie?.userId?.name}
+								</span>
 							</div>
 							<div className="bg-[#333333] p-1 rounded cursor-pointer">
 								<span>
@@ -55,14 +60,22 @@ const Summary = () => {
 							</div>
 						</div>
 						<div className="rounded-xl bg-[#000000] text-white px-6 mb-5 py-5">
-							Caau ddungs
+							{answersCorrect} câu đúng
 						</div>
 						<div className="mt-1 rounded-xl bg-[#000000] px-6 mb-5 py-5 flex justify-between items-center">
 							<div className="flex flex-col">
 								<span className="text-sm text-white font-medium mb-[1px]">
 									Điểm số
 								</span>
-								<span className="text-sm font-medium text-white">100000</span>
+								<span className="text-sm font-medium text-white">
+									{quizizzActivitie &&
+										quizizzActivitie.answers.reduce((acc, answer) => {
+											if (answer.isCorrect) {
+												return acc + answer.score;
+											}
+											return acc;
+										}, 0)}
+								</span>
 							</div>
 							<div className="bg-[#C3841C] rounded-lg p-1">
 								<span>
@@ -99,10 +112,13 @@ const Summary = () => {
 							</div>
 						</div>
 						<div className="mt-4">
-							<QuestionReview />
-							<QuestionReview />
-							<QuestionReview />
-							<QuestionReview />
+							{quizizzActivitie?.answers?.map((answer, index) => (
+								<QuestionReview
+									key={answer._id}
+									answer={answer}
+									index={index}
+								/>
+							))}
 						</div>
 					</div>
 				</div>

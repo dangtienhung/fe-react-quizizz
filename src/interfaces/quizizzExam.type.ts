@@ -37,3 +37,10 @@ export interface IQuizizzExamCreate {
 	thumbnail?: string;
 	user: string[];
 }
+
+export interface IQuizizzExamActivity {
+	_id: string;
+	title: string;
+	startDate: string;
+	endDate: string;
+}

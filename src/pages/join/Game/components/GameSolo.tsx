@@ -4,9 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AnswerResult } from '../interface/answerResult';
 import CardGame from './CardGame';
 import Header from '../../components/Header';
+import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type';
 import { IQuizizzQuestionExam } from '@/interfaces/quizizzExam.type';
 import { useFilterDuplicate } from '@/hooks/useFilterDuplicate';
 import { useGameSolo } from '@/store/gameStore';
+import { useQuizizzActivityStore } from '@/store/quizizzActivity';
 import { useSocket } from '@/hooks/useSocket';
 import { userStore } from '@/store/userStore';
 
@@ -67,7 +69,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 			useGameSolo.setState(() => ({
 				answers: [...arrayAnswers, answerItem],
 			}));
-			setTimeout(() => {
+			setTimeout(async () => {
 				const nextQuestion = currentQuestion + 1;
 				if (nextQuestion < quetionsList.length) {
 					setCurrentQuestion(nextQuestion);
@@ -90,12 +92,10 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 						quizizzExamId: id,
 						answers: answers,
 					};
-					const result = useFilterDuplicate(body);
-					socket.emit('addQuizizzActivity', result);
-					setTimeout(() => {
-						navigate(`/join/game/${id}?type=summary&finish=true`);
-					}, 1000);
-					socket.disconnect();
+					const result = await useFilterDuplicate(body);
+					if (result.answers.length === questions[0].questions.length) {
+						socket.emit('addQuizizzActivity', result);
+					}
 				}
 			}, 2000);
 		});
@@ -103,6 +103,20 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 			socket.off('answerResult');
 		};
 	}, [socket, selectAnswer, answers]);
+
+	useEffect(() => {
+		if (!socket) return;
+		socket.on('quizizzActivity', (data: IQuizizzActivity) => {
+			setTimeout(() => {
+				useQuizizzActivityStore.setState({ quizizzActivitie: data });
+				useQuizizzActivityStore.setState((state) => ({
+					quizizzActivities: [...state.quizizzActivities, data],
+				}));
+				navigate(`/join/game/${id}?type=summary&finish=true`);
+			}, 1000);
+			socket.disconnect();
+		});
+	}, [socket]);
 
 	/* sử lý sự kiện chọn đáp án */
 	const handleAnswerOptionClick = ({
@@ -171,9 +185,9 @@ const GameSolo = ({ questions }: GameSoloProps) => {
 				</div>
 			</div>
 			{finish && (
-				<div className="fixed select-none transition-all duration-1000 top-0 bottom-0 right-0 left-0 bg-black opacity-90 z-10">
-					<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-						<h2 className="text-white text-4xl font-bold">
+				<div className="opacity-90 fixed top-0 bottom-0 left-0 right-0 z-10 transition-all duration-1000 bg-black select-none">
+					<div className="top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2">
+						<h2 className="text-4xl font-bold text-white">
 							Tất cả đã được làm xong
 						</h2>
 					</div>
