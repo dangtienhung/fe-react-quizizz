@@ -1,19 +1,15 @@
 import { AnswerResult } from '../interface/answerResult';
 import { IQuizizzsAnswer } from '@/interfaces/quizizzExam.type';
+import { SelectAnswer } from '@/store/types/gameStore';
+import { memo } from 'react';
 
 interface CardGameProps {
 	className?: string;
 	card: IQuizizzsAnswer;
-	handleAnswerOptionClick: ({
-		id,
-		index,
-	}: {
-		id: string;
-		index: number;
-	}) => void;
-	answerResult: AnswerResult;
+	handleAnswerOptionClick: ({ id, index }: SelectAnswer) => void;
+	answerResult?: AnswerResult;
 	index: number;
-	isCorrect: boolean;
+	selectAnswer?: SelectAnswer;
 }
 
 const cardGameList = [
@@ -24,30 +20,54 @@ const cardGameList = [
 ];
 
 const CardGame = ({
-	card: { _id, content },
+	card,
 	handleAnswerOptionClick,
 	answerResult,
 	index,
-	isCorrect,
+	selectAnswer,
 }: CardGameProps) => {
 	let cardClasses =
 		'rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95';
-	if (answerResult !== null) {
-		if (answerResult.answer._id === _id) {
-			if (answerResult.result === true) {
-				cardGameList[index].bgColor = '#62C370';
-				cardGameList[index].boxShadow = '#62C370';
-			}
-		} else {
-			if (isCorrect === false) {
-				cardGameList[index].bgColor = '#D4546A';
-				cardGameList[index].boxShadow = '#BA2F47';
-			}
-		}
+
+	if (selectAnswer && selectAnswer !== null && answerResult) {
+		return (
+			<div
+				className={`${cardClasses} ${
+					selectAnswer.index === index
+						? 'block'
+						: answerResult?.answer._id === card._id
+						? 'block'
+						: 'invisible'
+				}`}
+				style={{
+					boxShadow: `${
+						answerResult?.answer._id === card._id
+							? '#0E9F6E'
+							: cardGameList[index].bgColor
+					} 0px 6px 0px 0px`,
+					backgroundColor: `${
+						answerResult?.answer._id === card._id
+							? '#2C9CA6'
+							: cardGameList[index].bgColor
+					}`,
+				}}
+				onClick={() => handleAnswerOptionClick({ id: card._id, index })}
+			>
+				<div
+					className={`${
+						selectAnswer.id === answerResult?.answer?._id
+							? 'bg-green-500'
+							: selectAnswer.id !== answerResult?.answer?._id &&
+							  selectAnswer.id === card._id
+							? 'bg-[#F05252]'
+							: 'bg-[#2C9CA6]'
+					} flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
+				>
+					{card.content}
+				</div>
+			</div>
+		);
 	}
-	const handleClick = ({ id, index }: { id: string; index: number }) => {
-		handleAnswerOptionClick({ id, index });
-	};
 	return (
 		<div
 			className={`${cardClasses}`}
@@ -55,15 +75,15 @@ const CardGame = ({
 				boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
 				backgroundColor: `${cardGameList[index].bgColor}`,
 			}}
-			onClick={() => handleClick({ id: _id, index })}
+			onClick={() => handleAnswerOptionClick({ id: card._id, index })}
 		>
 			<div
 				className={`flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
 			>
-				{content}
+				{card.content}
 			</div>
 		</div>
 	);
 };
 
-export default CardGame;
+export default memo(CardGame);

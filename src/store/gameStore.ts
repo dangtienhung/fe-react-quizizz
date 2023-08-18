@@ -7,6 +7,7 @@ export const useGameSolo = create<GameStoreState & GameStoreAction>()(
 		questions: [],
 		selectAnswer: null,
 		answerResult: null,
+		answers: [],
 		currentQuestion: Number(localStorage.getItem('currentQuestion')) || 0,
 		setCurrentQuestion: (newQuestion: number) => {
 			set((state) => ({ ...state, currentQuestion: newQuestion }));

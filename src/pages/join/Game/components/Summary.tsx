@@ -1,12 +1,24 @@
-import { BiSolidUser } from 'react-icons/bi';
-import Header from '../../components/Header';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { AiOutlineShareAlt } from 'react-icons/ai';
-import { HiDatabase } from 'react-icons/hi';
+import { BiSolidUser } from 'react-icons/bi';
 import { Button } from 'flowbite-react';
+import Header from '../../components/Header';
+import { HiDatabase } from 'react-icons/hi';
 import QuestionReview from './QuestionReview';
 import QuizRecommendation from './QuizRecommendation';
+import { useEffect } from 'react';
+import { useQuizizzExamStore } from '@/store/quizizzExam';
 
 const Summary = () => {
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const { quizizzExams, getQuizizzExams } = useQuizizzExamStore(
+		(state) => state
+	);
+	useEffect(() => {
+		getQuizizzExams();
+	}, []);
 	return (
 		<div className="flex flex-col bg-[#461A42] min-h-screen">
 			<Header />
@@ -61,6 +73,7 @@ const Summary = () => {
 					</div>
 					<div className="flex flex-col gap-4">
 						<Button
+							onClick={() => navigate(`/join/quiz/${id}`)}
 							className="bg-primary w-full hover:!bg-primary !outline-none !border-none cursor-pointer font-medium text-white text-xl"
 							style={{ boxShadow: '0 3px #0003, 0 3px #8854c0' }}
 						>
@@ -69,6 +82,7 @@ const Summary = () => {
 						<Button
 							className="bg-white w-full hover:!bg-white !outline-none !border-none cursor-pointer text-secondary text-xl font-medium"
 							style={{ boxShadow: '0 3px #0003, 0 3px #fff' }}
+							onClick={() => navigate(`/`)}
 						>
 							<span className="text-lg font-medium">Tìm quiz mới</span>
 						</Button>
@@ -95,10 +109,18 @@ const Summary = () => {
 				<div className="text-white lg:w-[25%] lg:block hidden w-full bg-[#230D21] py-6">
 					<h2 className="px-3 mb-8 text-sm">Bạn cũng có thể thích...</h2>
 					<div className="flex flex-col gap-1">
-						<QuizRecommendation />
-						<QuizRecommendation />
-						<QuizRecommendation />
-						<QuizRecommendation />
+						{quizizzExams &&
+							quizizzExams.length > 0 &&
+							quizizzExams.map((quizizzExam) => {
+								if (quizizzExam._id !== id) {
+									return (
+										<QuizRecommendation
+											key={quizizzExam._id}
+											quizizzExam={quizizzExam}
+										/>
+									);
+								}
+							})}
 					</div>
 				</div>
 			</div>
