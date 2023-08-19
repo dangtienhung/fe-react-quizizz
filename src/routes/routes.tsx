@@ -32,8 +32,10 @@ const PrivateRoute = ({ isAuth }: any) => {
 
 export const router = createBrowserRouter([
 	{ path: '/', element: <HomePage /> },
+	{ path: '/register', element: 'register' },
 	{
 		path: '/join',
+		element: <PrivateRoute />,
 		children: [
 			{ path: 'topic/:id', element: <Toppic /> },
 			{ path: 'quiz/:id', element: <PreQuiz /> },

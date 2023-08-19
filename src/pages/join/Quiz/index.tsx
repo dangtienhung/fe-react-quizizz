@@ -1,32 +1,43 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { BiUserCheck } from 'react-icons/bi';
 import { FaUsers } from 'react-icons/fa';
 import Header from '../components/Header';
 import Skeleton from 'react-loading-skeleton';
 import { VscDebugStart } from 'react-icons/vsc';
+import { caculatorPercent } from '@/utils/caculatorPercent';
+import moment from 'moment';
 import { useEffect } from 'react';
+import { useQuizizzActivityStore } from '@/store/quizizzActivity';
 import { useQuizizzExamStore } from '@/store/quizizzExam';
+import { userStore } from '@/store/userStore';
 
 const PreQuiz = () => {
+	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
+	const { user } = userStore((state) => state);
 	const { quizizzExam, getOneQuizizzExam, isLoading } = useQuizizzExamStore(
 		(state) => state
 	);
+	const { quizizzActivities, getAllQuizActivity } = useQuizizzActivityStore(
+		(state) => state
+	);
+	// const percent = caculatorPercent(quizizzActivities);
 	useEffect(() => {
 		if (id) {
 			getOneQuizizzExam(id);
+			getAllQuizActivity({ userId: user._id, roomId: id });
 		}
-	}, [getOneQuizizzExam, id]);
+	}, [id]);
 	return (
 		<div className="min-h-screen bg-black">
 			<Header />
-			<div className="flex justify-between gap-10 p-10 text-white bg-black">
+			<div className="flex justify-between gap-6 p-10 text-white bg-black">
 				{isLoading ? (
 					<Skeleton count={10} />
 				) : (
 					<>
-						<div className="w-[25%]">
+						<div className="w-[30%]">
 							<div className="p-6 bg-[#111111] rounded-xl">
 								<div className="flex items-start w-full gap-3">
 									<img
@@ -54,6 +65,44 @@ const PreQuiz = () => {
 									</span>
 								</div>
 							</div>
+							{quizizzActivities && quizizzActivities.length > 0 && (
+								<div className="my-6 bg-[#111111] rounded-xl overflow-hidden pb-6">
+									<h2 className="font-medium p-6 text-white text-base">
+										Hoạt động gần đây
+									</h2>
+									<div className="">
+										{quizizzActivities.map((activity, index) => {
+											return (
+												<div
+													// onClick={() => navigate(`/join/game/${activity.quizizzExamId.}`)}
+													key={activity._id}
+													className="py-2 cursor-pointer hover:bg-[#292929] p-6 group/item select-none"
+												>
+													<div className="flex items-center justify-between mb-1">
+														<h2 className="">Đánh giá solo</h2>
+														<span className="text-sm">40%</span>
+													</div>
+													<div className="h-2 w-full rounded bg-[#282828]">
+														<div
+															className={`w-1/2 bg-green-500 h-full rounded`}
+														></div>
+													</div>
+													<div className="flex justify-between items-center">
+														<span className="text-sm">
+															{moment(activity.createdAt).format(
+																'MMM D, h:mm a'
+															)}
+														</span>
+														<span className="text-sm text-secondary hidden group-hover/item:block">
+															Xem thêm
+														</span>
+													</div>
+												</div>
+											);
+										})}
+									</div>
+								</div>
+							)}
 						</div>
 						<div className="w-[50%]">
 							<div className="p-6 bg-[#111111] rounded-xl">
@@ -78,7 +127,7 @@ const PreQuiz = () => {
 								</button>
 							</div>
 						</div>
-						<div className="w-[25%]"></div>
+						<div className="w-[20%]"></div>
 					</>
 				)}
 			</div>

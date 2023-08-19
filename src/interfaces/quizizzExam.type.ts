@@ -43,4 +43,5 @@ export interface IQuizizzExamActivity {
 	title: string;
 	startDate: string;
 	endDate: string;
+	questions: IQuizizzQuestionExam[];
 }
