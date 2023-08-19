@@ -1,47 +1,47 @@
 export interface IQuizizzsAnswer {
-	_id: string;
-	content: string;
+  _id: string
+  content: string
 }
 
 export interface IQuizizzsQuestion {
-	_id: string;
-	title: string;
-	score: number;
-	questionAnswers: IQuizizzsAnswer[];
-	timer: number;
+  _id: string
+  title: string
+  score: number
+  questionAnswers: IQuizizzsAnswer[]
+  timer: number
 }
 
 export interface IQuizizzQuestionExam {
-	_id: string;
-	questions: IQuizizzsQuestion[];
+  _id: string
+  questions: IQuizizzsQuestion[]
 }
 
 export interface IQuizizzExam {
-	_id: string;
-	title: string;
-	user: [];
-	questions: IQuizizzQuestionExam[];
-	isPublic: boolean;
-	plays: number;
-	isDeleted: boolean;
-	startDate: string;
-	endDate: string;
-	createdAt: string;
-	updatedAt: string;
+  _id: string
+  title: string
+  user: []
+  questions: IQuizizzQuestionExam[]
+  isPublic: boolean
+  plays: number
+  isDeleted: boolean
+  startDate: string
+  endDate: string
+  createdAt: string
+  updatedAt: string
 }
 
 /* create */
 export interface IQuizizzExamCreate {
-	title: string;
-	questions: string[];
-	thumbnail?: string;
-	user: string[];
+  title: string
+  questions: string[]
+  thumbnail?: string
+  user: string[]
 }
 
 export interface IQuizizzExamActivity {
-	_id: string;
-	title: string;
-	startDate: string;
-	endDate: string;
-	questions: IQuizizzQuestionExam[];
+  _id: string
+  title: string
+  startDate: string
+  endDate: string
+  questions: IQuizizzQuestionExam[]
 }

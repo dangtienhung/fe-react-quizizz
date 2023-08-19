@@ -1,39 +1,38 @@
-import { IAnswer } from './answer.type';
+import { IAnswer } from './answer.type'
 
 interface QuizizzQuestionAnswer {
-	_id: string;
-	content: string;
-	isCorrect: boolean;
-	createdAt: string;
-	updatedAt: string;
+  _id: string
+  content: string
+  isCorrect: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export interface IQuestionAnswer {
-	content: string;
-	isCorrect: boolean;
+  content: string
+  isCorrect: boolean
 }
 
 export interface QuizizzQuestion {
-	_id: string;
-	title: string;
-	score: number;
-	active: boolean;
-	isDeleted: boolean;
-	quizizz: string[];
-	questionAnswers: QuizizzQuestionAnswer[];
-	timer: number;
-	createdAt: string;
-	updatedAt: string;
+  _id: string
+  title: string
+  score: number
+  active: boolean
+  isDeleted: boolean
+  quizizz: string[]
+  questionAnswers: QuizizzQuestionAnswer[]
+  timer: number
+  createdAt: string
+  updatedAt: string
 }
 
-export interface CreateQuizQuestion
-	extends Pick<QuizizzQuestion, 'title' | 'score' | 'timer'> {
-	questionAnswers: IQuestionAnswer[];
+export interface CreateQuizQuestion extends Pick<QuizizzQuestion, 'title' | 'score' | 'timer'> {
+  questionAnswers: IQuestionAnswer[]
 }
 
 export interface IQuizizzQuestion {
-	_id: string;
-	title: string;
-	score: number;
-	questionAnswers: IAnswer[];
+  _id: string
+  title: string
+  score: number
+  questionAnswers: IAnswer[]
 }

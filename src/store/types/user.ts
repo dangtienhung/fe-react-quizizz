@@ -1,14 +1,14 @@
-import { IRegister, IUser } from '../../interfaces/user.type';
+import { IRegister, IUser } from '../../interfaces/user.type'
 
 export type UserState = {
-	user: IUser;
-	isLoading: boolean;
-	errors: string;
-};
+  user: IUser
+  isLoading: boolean
+  errors: string
+}
 
 export type UserAction = {
-	/* register */
-	registerAuth: (data: IRegister) => void;
-	/* login */
-	loginAuth: (data: IRegister) => void;
-};
+  /* register */
+  registerAuth: (data: IRegister) => void
+  /* login */
+  loginAuth: (data: IRegister) => void
+}

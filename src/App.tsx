@@ -1,7 +1,7 @@
-import RootRoutes from './routes';
+import RootRoutes from './routes'
 
 function App() {
-	return <RootRoutes />;
+  return <RootRoutes />
 }
 
-export default App;
+export default App

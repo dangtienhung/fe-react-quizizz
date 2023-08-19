@@ -1,7 +1,7 @@
-import LayoutAdmin from '@/layouts/LayoutAdmin';
+import LayoutAdmin from '@/layouts/LayoutAdmin'
 
 const CreateByMe = () => {
-	return <LayoutAdmin>CreateByMe</LayoutAdmin>;
-};
+  return <LayoutAdmin>CreateByMe</LayoutAdmin>
+}
 
-export default CreateByMe;
+export default CreateByMe

@@ -1,20 +1,20 @@
 export enum EStatus {
-	ACTIVE = 'ACTIVE',
-	INACTIVE = 'INACTIVE',
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE'
 }
 
 export enum GameType {
-	SOLO = 'solo',
-	SUMMARY = 'summary',
+  SOLO = 'solo',
+  SUMMARY = 'summary'
 }
 
 export enum ETypeRoom {
-	PRIVATE = 'PRIVATE',
-	PUBLIC = 'PUBLIC',
-	DRAF = 'DRAF',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+  DRAF = 'DRAF'
 }
 
 export enum EGameInfo {
-	ROOM = 'room',
-	TYPE = 'type',
+  ROOM = 'room',
+  TYPE = 'type'
 }

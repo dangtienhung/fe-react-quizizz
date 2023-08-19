@@ -1,15 +1,15 @@
-import { IQuizizzs } from '../../interfaces/quizizz.type';
+import { IQuizizzs } from '../../interfaces/quizizz.type'
 
 export type IQuizizzState = {
-	quizizzs: IQuizizzs[];
-	quizizz: IQuizizzs;
-	isLoading: boolean;
-	error: string;
-};
+  quizizzs: IQuizizzs[]
+  quizizz: IQuizizzs
+  isLoading: boolean
+  error: string
+}
 
 export type IQuizizzAction = {
-	/* get quizizzs */
-	getQuizizzs: () => void;
-	/* get one */
-	getOneQuizizz: (id: string) => void;
-};
+  /* get quizizzs */
+  getQuizizzs: () => void
+  /* get one */
+  getOneQuizizz: (id: string) => void
+}
