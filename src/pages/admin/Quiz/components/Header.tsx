@@ -1,9 +1,9 @@
 import { AiFillSave, AiFillSetting } from 'react-icons/ai'
 import { Button, Dropdown, Label, Modal, TextInput } from 'flowbite-react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { BsPlusSquareFill } from 'react-icons/bs'
 import { IQuizizzs } from '@/interfaces/quizizz.type'
-import { Link } from 'react-router-dom'
 import { VscDebugStart } from 'react-icons/vsc'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { useState } from 'react'
@@ -15,6 +15,7 @@ interface HeaderProps {
 }
 
 const Header = ({ className, quizizz }: HeaderProps) => {
+  const navigate = useNavigate()
   const { createQuizizzExam } = useQuizizzExamStore((state) => state)
   const [openModal, setOpenModal] = useState<string | undefined>()
   const [title, setTitle] = useState<string>('')
@@ -29,6 +30,7 @@ const Header = ({ className, quizizz }: HeaderProps) => {
         questions: [quizizz._id],
         user: [quizizz.user._id]
       })
+      navigate('/admin/my-library')
     }
   }
   return (

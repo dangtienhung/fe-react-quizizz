@@ -1,4 +1,4 @@
-import { IQuizizzs } from '../../interfaces/quizizz.type'
+import { IQuizizz, IQuizizzs } from '../../interfaces/quizizz.type'
 
 export type IQuizizzState = {
   quizizzs: IQuizizzs[]
@@ -12,4 +12,6 @@ export type IQuizizzAction = {
   getQuizizzs: () => void
   /* get one */
   getOneQuizizz: (id: string) => void
+  /* create quizizz */
+  createQuizizz: (quizizz: IQuizizz) => void
 }

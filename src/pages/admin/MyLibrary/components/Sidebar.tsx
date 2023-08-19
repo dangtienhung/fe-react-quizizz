@@ -6,6 +6,7 @@ import { Modal } from 'flowbite-react'
 import { VscLibrary } from 'react-icons/vsc'
 import { createQuiz } from '../../../../api/quizizz'
 import { useMutation } from 'react-query'
+import { useQuizizzStore } from '@/store/quizizzStore'
 import { useState } from 'react'
 import { userStore } from '../../../../store/userStore'
 
@@ -20,14 +21,13 @@ const Sidebar = () => {
   const [isActive, setIsActive] = useState<number>(0)
   const [openModal, setOpenModal] = useState<string | undefined>()
   const props = { openModal, setOpenModal }
-
   /* create quizizz */
   const createQuizizzMutate = useMutation({
     mutationFn: () => {
       return createQuiz({ title: '', user: user._id, questions: [] })
     }
   })
-  const createQuizizz = async () => {
+  const hanleCreateQuizizz = async () => {
     try {
       const response = await createQuizizzMutate.mutateAsync()
       navigate(`/admin/quiz/questions/create/${response.data._id}`)
@@ -87,9 +87,10 @@ const Sidebar = () => {
             <div
               className='rounded-lg mb-5 border hover:bg-[rgb(237,230,246)] hover:border-primary cursor-pointer gap-3 flex flex-col px-4 pt-3 pb-4'
               style={{ boxShadow: '0 4px #b6b6b6' }}
+              onClick={() => hanleCreateQuizizz()}
             >
               <div className='inline-block w-full h-full select-none'>
-                <div className='flex items-center gap-3' onClick={() => createQuizizz()}>
+                <div className='flex items-center gap-3'>
                   <img
                     src={`https://cf.quizizz.com/img/illustrations/quiz.png`}
                     alt='empty-state'

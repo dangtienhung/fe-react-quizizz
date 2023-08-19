@@ -1,8 +1,8 @@
+import { IQuizizz, IQuizizzs } from '../interfaces/quizizz.type'
 import { IQuizizzAction, IQuizizzState } from './types/quizizz'
+import { createQuiz, getAllQuizs, getOneQuiz } from '../api/quizizz'
 import { devtools, persist } from 'zustand/middleware'
-import { getAllQuizs, getOneQuiz } from '../api/quizizz'
 
-import { IQuizizzs } from '../interfaces/quizizz.type'
 import { create } from 'zustand'
 
 export const useQuizizzStore = create<IQuizizzState & IQuizizzAction>()(
@@ -31,6 +31,18 @@ export const useQuizizzStore = create<IQuizizzState & IQuizizzAction>()(
             set({ quizizz: response.data, isLoading: false })
           } catch (error: any) {
             set({ error: error.response.data.message })
+          }
+        },
+        /* create quizizz */
+        createQuizizz: async (quizizz: IQuizizz) => {
+          try {
+            set({ isLoading: true })
+            const respone = await createQuiz(quizizz)
+            console.log('🚀 ~ file: quizizzStore.ts:41 ~ createQuizizz: ~ respone:', respone)
+            set({ isLoading: false })
+            // set({ quizizz: respone.data })
+          } catch (error: any) {
+            set({ error: error })
           }
         }
       }),

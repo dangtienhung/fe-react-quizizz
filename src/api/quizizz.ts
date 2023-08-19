@@ -7,7 +7,7 @@ export const createQuiz = async (quiz: IQuizizz) => {
 }
 
 /* lấy ra các quiz được tạo bởi người dùng */
-export const getQuizs = async (id: string, _page: number = 1, _limit: number = 10) => {
+export const getQuizs = async (id: string, _page: number = 1, _limit: number = 5) => {
   return http.get(`/quizizz/lists/${id}?_page=${_page}&_limit=${_limit}`)
 }
 
