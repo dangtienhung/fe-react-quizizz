@@ -1,7 +1,13 @@
+import { Button } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import { Variant } from '..';
 import { userStore } from '../../../store/userStore';
 
-const ActionableContent = () => {
+interface ActionableContentProps {
+	handleOpenModal: (placement: Variant) => void;
+}
+
+const ActionableContent = ({ handleOpenModal }: ActionableContentProps) => {
 	const { user } = userStore((state) => state);
 	return (
 		<div className="lg:p-7 p-4">
@@ -38,12 +44,12 @@ const ActionableContent = () => {
 							</div>
 							<div className="">
 								<p className="text-center">
-									<Link
-										to={`/register`}
-										className="text-primary font-bold underline"
+									<span
+										className="text-primary font-bold underline cursor-pointer"
+										onClick={() => handleOpenModal('REGISTER')}
 									>
 										Đăng ký
-									</Link>
+									</span>
 									<span> Bây giờ để mở khóa hình đại diện của riêng bạn</span>
 								</p>
 							</div>
