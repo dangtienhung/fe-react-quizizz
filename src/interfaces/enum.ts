@@ -7,3 +7,14 @@ export enum GameType {
 	SOLO = 'solo',
 	SUMMARY = 'summary',
 }
+
+export enum ETypeRoom {
+	PRIVATE = 'PRIVATE',
+	PUBLIC = 'PUBLIC',
+	DRAF = 'DRAF',
+}
+
+export enum EGameInfo {
+	ROOM = 'room',
+	TYPE = 'type',
+}

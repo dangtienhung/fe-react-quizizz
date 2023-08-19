@@ -16,3 +16,14 @@ export const getAllQuizExamActivity = async ({
 		return error;
 	}
 };
+
+export const getOneQuizExamActivity = async (roomId: string) => {
+	try {
+		const response = await http.get(`/quiz-activity/${roomId}`);
+		if (response && response.data) {
+			return response.data;
+		}
+	} catch (error) {
+		return error;
+	}
+};

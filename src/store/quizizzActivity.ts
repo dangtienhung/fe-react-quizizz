@@ -4,10 +4,13 @@ import {
 	QuizizzActivityState,
 } from './types/quizizzActivity';
 import { devtools, persist } from 'zustand/middleware';
+import {
+	getAllQuizExamActivity,
+	getOneQuizExamActivity,
+} from '@/api/quizActivity';
 
 import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type';
 import { create } from 'zustand';
-import { getAllQuizExamActivity } from '@/api/quizActivity';
 
 export const useQuizizzActivityStore = create<
 	QuizizzActivityState & QuizizzActivityAction
@@ -29,6 +32,18 @@ export const useQuizizzActivityStore = create<
 						const data = await getAllQuizExamActivity({ userId, roomId });
 						if (data) {
 							set({ quizizzActivities: data });
+						}
+					} catch (error: any) {
+						set({ isLoading: false, error: error });
+					}
+				},
+				/* get one */
+				getOneQuizActivity: async (roomId: string) => {
+					try {
+						set({ isLoading: true });
+						const data = await getOneQuizExamActivity(roomId);
+						if (data) {
+							set({ quizizzActivitie: data });
 						}
 					} catch (error: any) {
 						set({ isLoading: false, error: error });

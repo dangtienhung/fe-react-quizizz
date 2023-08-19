@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import { BiUserCheck } from 'react-icons/bi';
 import { FaUsers } from 'react-icons/fa';
@@ -7,7 +8,6 @@ import Skeleton from 'react-loading-skeleton';
 import { VscDebugStart } from 'react-icons/vsc';
 import { caculatorPercent } from '@/utils/caculatorPercent';
 import moment from 'moment';
-import { useEffect } from 'react';
 import { useQuizizzActivityStore } from '@/store/quizizzActivity';
 import { useQuizizzExamStore } from '@/store/quizizzExam';
 import { userStore } from '@/store/userStore';
@@ -22,7 +22,11 @@ const PreQuiz = () => {
 	const { quizizzActivities, getAllQuizActivity } = useQuizizzActivityStore(
 		(state) => state
 	);
-	// const percent = caculatorPercent(quizizzActivities);
+	const [percent, setPercent] = useState<number[]>([]);
+	useEffect(() => {
+		const result = caculatorPercent(quizizzActivities);
+		setPercent(result);
+	}, [quizizzActivities]);
 	useEffect(() => {
 		if (id) {
 			getOneQuizizzExam(id);
@@ -72,33 +76,40 @@ const PreQuiz = () => {
 									</h2>
 									<div className="">
 										{quizizzActivities.map((activity, index) => {
-											return (
-												<div
-													// onClick={() => navigate(`/join/game/${activity.quizizzExamId.}`)}
-													key={activity._id}
-													className="py-2 cursor-pointer hover:bg-[#292929] p-6 group/item select-none"
-												>
-													<div className="flex items-center justify-between mb-1">
-														<h2 className="">Đánh giá solo</h2>
-														<span className="text-sm">40%</span>
+											if (index % 2 === 0) {
+												return (
+													<div
+														onClick={() =>
+															navigate(
+																`/join/game/${activity.quizizzExamId._id}?room=${activity._id}&type=summary&finish=true`
+															)
+														}
+														key={activity._id}
+														className="py-2 cursor-pointer hover:bg-[#292929] p-6 group/item select-none"
+													>
+														<div className="flex items-center justify-between mb-1">
+															<h2 className="">Đánh giá solo</h2>
+															<span className="text-sm">{percent[index]}%</span>
+														</div>
+														<div className="h-2 w-full rounded bg-[#282828]">
+															<div
+																className={`bg-green-500 h-full rounded`}
+																style={{ width: `${percent[index]}%` }}
+															></div>
+														</div>
+														<div className="flex justify-between items-center">
+															<span className="text-sm">
+																{moment(activity.createdAt).format(
+																	'MMM D, h:mm a'
+																)}
+															</span>
+															<span className="text-sm text-secondary hidden group-hover/item:block">
+																Xem thêm
+															</span>
+														</div>
 													</div>
-													<div className="h-2 w-full rounded bg-[#282828]">
-														<div
-															className={`w-1/2 bg-green-500 h-full rounded`}
-														></div>
-													</div>
-													<div className="flex justify-between items-center">
-														<span className="text-sm">
-															{moment(activity.createdAt).format(
-																'MMM D, h:mm a'
-															)}
-														</span>
-														<span className="text-sm text-secondary hidden group-hover/item:block">
-															Xem thêm
-														</span>
-													</div>
-												</div>
-											);
+												);
+											}
 										})}
 									</div>
 								</div>
@@ -115,7 +126,11 @@ const PreQuiz = () => {
 										style={{ boxShadow: '#00a06a 0px 4px 0px 0px' }}
 									>
 										<VscDebugStart size={20} />
-										<span>Bắt đầu</span>
+										<span>
+											{quizizzActivities && quizizzActivities.length > 0
+												? 'Nướng lại'
+												: 'Bắt đầu'}
+										</span>
 									</button>
 								</Link>
 								<button
