@@ -6,7 +6,6 @@ import { Modal } from 'flowbite-react'
 import { VscLibrary } from 'react-icons/vsc'
 import { createQuiz } from '../../../../api/quizizz'
 import { useMutation } from 'react-query'
-import { useQuizizzStore } from '@/store/quizizzStore'
 import { useState } from 'react'
 import { userStore } from '../../../../store/userStore'
 

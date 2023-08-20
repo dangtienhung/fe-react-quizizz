@@ -15,4 +15,5 @@ export type QuizizzActivityState = {
 export type QuizizzActivityAction = {
   getAllQuizActivity: ({ userId, roomId }: IQuizizzActivityInfo) => void
   getOneQuizActivity: (id: string) => void
+  getAllQuizActivityByUserId: (userId: string, _page: number, _limit: number) => void
 }

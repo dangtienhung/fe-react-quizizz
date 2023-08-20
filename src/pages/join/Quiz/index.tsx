@@ -20,8 +20,10 @@ const PreQuiz = () => {
   const { quizizzActivities, getAllQuizActivity } = useQuizizzActivityStore((state) => state)
   const [percent, setPercent] = useState<number[]>([])
   useEffect(() => {
-    const result = caculatorPercent(quizizzActivities)
-    setPercent(result)
+    if (quizizzActivities && quizizzActivities.length > 0) {
+      const result = caculatorPercent(quizizzActivities)
+      setPercent(result)
+    }
   }, [quizizzActivities])
   useEffect(() => {
     if (id) {
@@ -81,7 +83,11 @@ const PreQuiz = () => {
                             </div>
                             <div className='h-2 w-full rounded bg-[#282828]'>
                               <div
-                                className={`bg-green-500 h-full rounded`}
+                                className={`
+                                  ${percent[index] <= 50 && 'bg-[#F14D76]'}
+                                  ${percent[index] <= 70 && percent[index] >= 50 && 'bg-[#ff941a]'}
+                                  ${percent[index] <= 100 && percent[index] >= 70 && 'bg-[#5DE2A5]'}
+                                h-full rounded`}
                                 style={{ width: `${percent[index]}%` }}
                               ></div>
                             </div>
