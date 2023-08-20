@@ -22,3 +22,14 @@ export const getOneQuizExamActivity = async (roomId: string) => {
     return error
   }
 }
+
+export const getAllQuizActivitiesByUserId = async (userId: string, _page: number = 1, _limit: number = 4) => {
+  try {
+    const response = await http.get(`/quiz-activity/list-all?userId=${userId}&_page=${_page}&_limit=${_limit}`)
+    if (response && response.data) {
+      return response.data
+    }
+  } catch (error) {
+    return error
+  }
+}
