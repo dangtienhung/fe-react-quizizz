@@ -43,7 +43,6 @@ export const useQuizizzExamStore = create<IQuizizzExamState & IQuizizzExamAction
           try {
             set({ isLoading: false })
             const response = await createQuizizzExam(data)
-            console.log('🚀 ~ file: quizizzExam.ts:51 ~ createQuizizzExam: ~ response:', response)
             set({ quizizzExam: response.data })
           } catch (error: any) {
             set({ isLoading: false })

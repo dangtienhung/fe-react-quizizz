@@ -1,10 +1,11 @@
 import { AiOutlineBars } from 'react-icons/ai'
-import { IQuizizzs } from '../../../../interfaces/quizizz.type'
+import { IQuizizzs } from '@/interfaces/quizizz.type'
 import { IoMdArrowDropdown } from 'react-icons/io'
-import { getQuizs } from '../../../../api/quizizz'
+import { MdOutlineWatchLater } from 'react-icons/md'
+import { getQuizs } from '@/api/quizizz'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
-import { userStore } from '../../../../store/userStore'
+import { userStore } from '@/store/userStore'
 
 const ListQuizizz = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const ListQuizizz = () => {
     queryFn: () => getQuizs(user._id),
     keepPreviousData: true
   })
+  console.log('🚀 ~ file: ListQuizizz.tsx:17 ~ ListQuizizz ~ data:', data)
   return (
     <div className='flex-1 w-full'>
       {data && data.data.length === 0 && (
@@ -54,7 +56,10 @@ const ListQuizizz = () => {
                     />
                   </div>
                   <div className='flex-1'>
-                    <h3 className=''>Quiz</h3>
+                    <h3 className='flex items-center gap-3'>
+                      <p className=''>Quiz</p>
+                      <p className='bg-[#00C985] text-xs text-white rounded-xl px-2 font-medium'>Public</p>
+                    </h3>
                     <h2 className='font-bold truncate text-[#222]'>{item.title || 'Untitled'}</h2>
                     <div className='flex items-center gap-4'>
                       <div className='flex items-center gap-2'>
@@ -75,11 +80,27 @@ const ListQuizizz = () => {
                       </div>
                       <div className='flex items-center h-full'>
                         <div
-                          onClick={() => navigate(`/join/quiz/${item._id}`)}
-                          className='cursor-pointer flex gap-1 items-center px-1 py-[1px] bg-primary text-white rounded'
+                          // onClick={() => navigate(`/join/quiz/${item._id}`)}
+                          className='relative group/item'
                         >
-                          Chơi
-                          <IoMdArrowDropdown />
+                          <div className='cursor-pointer flex mt-[6px] gap-1 items-center px-1 bg-primary text-white rounded'>
+                            Chơi
+                            <IoMdArrowDropdown />
+                          </div>
+                          <div className='absolute select-none top-full w-[200px] -left-[200px] border bg-white shadow-md rounded hidden group-hover/item:block before:absolute before:h-8 before:w-1/2 before:top-[-16px] before:left-2/3'>
+                            <div className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                              <MdOutlineWatchLater />
+                              Quiz trực tiếp
+                            </div>
+                            <div className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                              <MdOutlineWatchLater />
+                              Giáo viên điều khiển
+                            </div>
+                            <div className='cursor-pointer text-sm py-2 flex gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                              <MdOutlineWatchLater />
+                              Bài tập về nhà
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

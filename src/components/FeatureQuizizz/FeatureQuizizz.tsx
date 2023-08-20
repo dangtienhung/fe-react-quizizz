@@ -14,12 +14,14 @@ const FeatureQuizizz = ({ className }: FeatureQuizizzProps) => {
   const { quizizzExams, getQuizizzExams } = useQuizizzExamStore((state) => state)
   const { quizizzActivities, getAllQuizActivityByUserId } = useQuizizzActivityStore((state) => state)
   useEffect(() => {
+    if (user && user._id) {
+      getAllQuizActivityByUserId(user._id, 1, 10)
+    }
     getQuizizzExams()
-    getAllQuizActivityByUserId(user._id, 1, 10)
-  }, [])
+  }, [user])
   return (
     <div className={`p-4 md:p-7 ${className}`}>
-      <QuizizzList quizizzActivities={quizizzActivities} />
+      {user && user._id && <QuizizzList quizizzActivities={quizizzActivities} />}
       <QuizizzList quizizzExams={quizizzExams} />
     </div>
   )

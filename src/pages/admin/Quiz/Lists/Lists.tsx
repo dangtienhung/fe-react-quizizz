@@ -29,7 +29,7 @@ const QuizLists = () => {
             <div className='flex items-center justify-between my-5'>
               <div className='flex items-center gap-1'>
                 <BsListCheck />
-                <span className='text-secondary font-semibold'>{quizizz.questions.length} câu hỏi</span>
+                <span className='text-secondary font-semibold'>{quizizz?.questions?.length} câu hỏi</span>
               </div>
               <div
                 onClick={() => navigate(`/admin/quiz/questions/create/${id}`)}
@@ -40,8 +40,8 @@ const QuizLists = () => {
               </div>
             </div>
             {quizizz &&
-              quizizz.questions.length > 0 &&
-              quizizz.questions.flat().map((question, index) => {
+              quizizz?.questions?.length > 0 &&
+              quizizz?.questions?.flat().map((question, index) => {
                 return (
                   <div className='mb-8 bg-white border rounded-lg select-none' key={question._id}>
                     <div className=''>

@@ -1,3 +1,5 @@
+import * as yup from 'yup'
+
 import { AiFillSave, AiFillSetting } from 'react-icons/ai'
 import { Button, Dropdown, Label, Modal, TextInput } from 'flowbite-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -5,8 +7,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { BsPlusSquareFill } from 'react-icons/bs'
 import { IQuizizzs } from '@/interfaces/quizizz.type'
 import { VscDebugStart } from 'react-icons/vsc'
+import { useForm } from 'react-hook-form'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 interface HeaderProps {
   children?: React.ReactNode
@@ -14,22 +18,28 @@ interface HeaderProps {
   quizizz?: IQuizizzs
 }
 
+const schema = yup.object({
+  title: yup.string().required('Tiêu đề không được để trống')
+})
+
 const Header = ({ className, quizizz }: HeaderProps) => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors }
+  } = useForm({ resolver: yupResolver(schema) })
   const navigate = useNavigate()
   const { createQuizizzExam } = useQuizizzExamStore((state) => state)
   const [openModal, setOpenModal] = useState<string | undefined>()
-  const [title, setTitle] = useState<string>('')
+  const [title] = useState<string>('')
   const props = { openModal, setOpenModal }
 
   /* xuất bản chương trình */
-  const handlePublish = () => {
+  const handlePublish = (data: any) => {
     if (quizizz) {
       setOpenModal(undefined)
-      createQuizizzExam({
-        title,
-        questions: [quizizz._id],
-        user: [quizizz.user._id]
-      })
+      console.log({ title: data.title, questions: [quizizz._id], user: [quizizz.user._id] })
+      createQuizizzExam({ title: data.title, questions: [quizizz._id], user: [quizizz.user._id] })
       navigate('/admin/my-library')
     }
   }
@@ -52,7 +62,10 @@ const Header = ({ className, quizizz }: HeaderProps) => {
         <div className='relative flex items-center flex-1'>
           <div className='absolute top-1/2 -translate-y-1/2 -left-6 h-8 w-[2px] z-50 bg-[#B6B6B6]'></div>
           <div className='flex-1'>
-            <button className='rounded px-2 py-1 font-medium outline-none border-none hover:bg-[#F2F2F2]'>
+            <button
+              className='rounded px-2 py-1 font-medium outline-none border-none hover:bg-[#F2F2F2]'
+              onClick={() => props.setOpenModal('dismissible')}
+            >
               {title === '' ? 'Bài quiz không có tiêu đề' : title}
             </button>
           </div>
@@ -75,19 +88,14 @@ const Header = ({ className, quizizz }: HeaderProps) => {
       </div>
       <Modal dismissible show={props.openModal === 'dismissible'} onClose={() => props.setOpenModal(undefined)}>
         <Modal.Body>
-          <form className='grid w-full grid-cols-2 gap-5'>
+          <form className='grid w-full grid-cols-2 gap-5' onSubmit={handleSubmit(handlePublish)}>
             <div>
               <div className='mb-8'>
                 <div className='mb-2 block'>
                   <Label htmlFor='' value='Tiêu đề' />
                 </div>
-                <TextInput
-                  placeholder='Tiêu đề bài biết'
-                  required
-                  type='text'
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
+                <TextInput placeholder='Tiêu đề bài biết' {...register('title')} type='text' />
+                {errors.title && <p className='text-red-500 text-sm'>{errors.title.message}</p>}
               </div>
               <div className=''>
                 <div className='w-full'>
@@ -116,7 +124,7 @@ const Header = ({ className, quizizz }: HeaderProps) => {
               </div>
             </div>
             <div></div>
-            <Button style={{ width: 'fit-content', marginLeft: 'auto' }} onClick={() => handlePublish()}>
+            <Button style={{ width: 'fit-content', marginLeft: 'auto' }} type='submit'>
               Xuất bản
             </Button>
           </form>
