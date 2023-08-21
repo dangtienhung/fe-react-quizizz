@@ -11,6 +11,10 @@ import { useGameType } from '@/hooks/useGameType'
 import { useSocket } from '@/hooks/useSocket'
 import { userStore } from '@/store/userStore'
 
+// import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type'
+
+// import { useQuizizzActivityStore } from '@/store/quizizzActivity'
+
 interface HeaderProps {
   quetionsList?: IQuizizzsQuestion[]
   currentQuestion?: number
