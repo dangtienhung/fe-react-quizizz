@@ -3,12 +3,13 @@ import { IQuizizzs } from '@/interfaces/quizizz.type'
 import { IoMdArrowDropdown } from 'react-icons/io'
 import { MdOutlineWatchLater } from 'react-icons/md'
 import { getQuizs } from '@/api/quizizz'
-import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { userStore } from '@/store/userStore'
 
+// import { useNavigate } from 'react-router-dom'
+
 const ListQuizizz = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const { user } = userStore((state) => state)
   const { data } = useQuery({
     queryKey: ['students'],

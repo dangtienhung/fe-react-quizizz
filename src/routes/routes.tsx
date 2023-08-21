@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
     path: '/join',
     element: <PrivateRoute />,
     children: [
+      { index: true, element: <Navigate to='/' /> },
       { path: 'topic/:id', element: <Toppic /> },
       { path: 'quiz/:id', element: <PreQuiz /> },
       { path: 'game/:id', element: <QuizizzGame /> },
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       {
         path: 'quiz',
         children: [
+          { index: true, element: <Navigate to='admin' /> },
           { path: 'lists/:id', element: <QuizLists /> },
           { path: 'edit/:id', element: <QuizEdit /> },
           { path: 'questions/create/:id', element: <CreateQuestion /> },
