@@ -47,7 +47,7 @@ const HomePage = () => {
   }, [variant])
   useEffect(() => {
     if (errorList) {
-      toast.error(errorList)
+      // toast.error(errorList)
     }
     if (openModal === undefined) {
       setVariant('LOGIN')

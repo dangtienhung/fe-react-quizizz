@@ -35,14 +35,14 @@ const QuizizzList = ({ quizizzExams, quizizzActivities }: QuizizzListProps) => {
     }
   }, [])
   return (
-    <div className='mt-[44px]'>
+    <div className='mt-[44px] xl:max-w-7xl xl:mx-auto'>
       <div className='flex items-center justify-between mb-2'>
         <h1 className='text-xl font-medium'>{quizizzActivities ? 'Hoạt động gần đây' : 'Các bài quiz'}</h1>
         <Link to={`/join/topic/123`} className='px-6 py-1 font-bold bg-[#EEE9F4] rounded text-primary'>
           Xem thêm
         </Link>
       </div>
-      <div className='md:grid-cols-4 lg:grid-cols-5 grid grid-cols-2 gap-4'>
+      <div className='md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 grid grid-cols-2 gap-4'>
         {quizizzExams &&
           quizizzExams.length > 0 &&
           quizizzExams.map((quizizzExam) => <Card key={quizizzExam._id} quizizzExam={quizizzExam} />)}
@@ -53,7 +53,7 @@ const QuizizzList = ({ quizizzExams, quizizzActivities }: QuizizzListProps) => {
               return (
                 <div
                   key={quizizzActivity._id}
-                  className='!w-[230px] border border-gray-200 rounded-lg shadow cursor-pointer select-none'
+                  className='!w-[100%] border border-gray-200 rounded-lg shadow cursor-pointer select-none flex flex-col'
                 >
                   <div className='relative h-[126px]'>
                     <img
@@ -72,16 +72,24 @@ const QuizizzList = ({ quizizzExams, quizizzActivities }: QuizizzListProps) => {
                       {quizizzActivity.quizizzExamId.title}
                     </h2>
                   </div>
-                  <div className='px-2 pb-3'>
+                  <div className='px-2 pb-3 mt-auto'>
                     <div
                       className={`h-5 w-full rounded-xl relative overflow-hidden ${
                         percent[index] <= 50 && 'bg-[#F14D76]'
                       } ${percent[index] <= 70 && percent[index] >= 50 && 'bg-[#ff941a]'} ${
                         percent[index] <= 100 && percent[index] >= 70 && 'bg-[#5DE2A5]'
-                      }`}
+                      } ${!quizizzActivity.isCompleted && 'bg-primary'}`}
                     >
                       <div className='absolute top-1/2 left-3 -translate-y-1/2'>
-                        <span className='text-sm font-semibold text-white'>Độ chính xác {percent[index]}%</span>
+                        {quizizzActivity.isCompleted ? (
+                          <span className='text-sm font-semibold text-white'>Độ chính xác {percent[index]}%</span>
+                        ) : (
+                          <span className='text-sm font-semibold text-white'>
+                            {quizizzActivity.quizizzExamId.questions[0].questions.length -
+                              quizizzActivity.answers.length}{' '}
+                            câu hỏi ở bên trái
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
