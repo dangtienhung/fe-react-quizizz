@@ -1,8 +1,10 @@
 import { FaUserCircle, FaUserEdit } from 'react-icons/fa'
 
+import { IUser } from '@/interfaces/user.type'
 import { IoIosArrowForward } from 'react-icons/io'
 import LayoutDefault from '../../../layouts/LayoutDefault'
 import SettingContainer from './components/SettingContainer'
+import { userStore } from '@/store/userStore'
 
 const info = [
   { title: 'Hình đại diện', content: 'parry pirate' },
@@ -10,6 +12,7 @@ const info = [
 ]
 
 const Setting = () => {
+  const { user } = userStore((state) => state)
   return (
     <LayoutDefault>
       <div className='md:p-0 flex-1 p-2'>
@@ -39,7 +42,15 @@ const Setting = () => {
                 <IoIosArrowForward />
               </span>
             </div>
-            <div className='flex items-center justify-between mb-3 select-none'>
+            <div
+              className='flex items-center justify-between mb-3 select-none'
+              onClick={() => {
+                if (user) {
+                  userStore.setState({ user: {} as IUser })
+                  localStorage.removeItem('user')
+                }
+              }}
+            >
               <div className='flex-1 cursor-pointer'>
                 <h3 className='text-lg font-medium'>Đăng xuất</h3>
               </div>

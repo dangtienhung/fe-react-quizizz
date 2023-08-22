@@ -8,6 +8,7 @@ export interface IQuizizzActivity {
   userId: UserActivity
   answers: IAnswerActivity[]
   isCompleted: boolean
+  score: number
   createdAt: string
   updatedAt: string
 }
