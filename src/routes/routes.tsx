@@ -6,6 +6,7 @@ import HomePage from '@/pages/home'
 import LayoutAdmin from '@/layouts/LayoutAdmin'
 import MyLibrary from '@/pages/admin/MyLibrary'
 import PreQuiz from '@/pages/join/Quiz'
+import Presentation from '@/pages/admin/Presentation'
 import QuizEdit from '@/pages/admin/Quiz/Edit'
 import QuizLists from '@/pages/admin/Quiz/Lists/Lists'
 import QuizizzGame from '@/pages/join/Game'
@@ -61,7 +62,8 @@ export const router = createBrowserRouter([
           { path: 'edit/:id', element: <QuizEdit /> },
           { path: 'questions/create/:id', element: <CreateQuestion /> }
         ]
-      }
+      },
+      { path: 'presentation/:id', element: <Presentation /> }
     ]
   }
 ])
