@@ -1,14 +1,9 @@
 import { Outlet, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-import Header from '../pages/admin/components/Header'
 import Sidebar from '../pages/admin/MyLibrary/components/Sidebar'
 
-interface LayoutAdminProps {
-  children?: React.ReactNode
-}
-
-const LayoutAdmin = ({ children }: LayoutAdminProps) => {
+const LayoutAdmin = () => {
   const [searchParams] = useSearchParams()
   const [, setCreateByMe] = useState<boolean>(false)
   useEffect(() => {
