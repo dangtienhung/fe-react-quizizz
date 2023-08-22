@@ -1,81 +1,36 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { memo, useEffect, useState } from 'react'
 
+import { AiOutlineMinus } from 'react-icons/ai'
 import { CiSettings } from 'react-icons/ci'
+import { FaMedal } from 'react-icons/fa'
 import { IQuizizzsQuestion } from '@/interfaces/quizizzExam.type'
 import { Modal } from 'flowbite-react'
-import { VscClose } from 'react-icons/vsc'
-import { useFilterDuplicate } from '@/hooks/useFilterDuplicate'
 import { useGameSolo } from '@/store/gameStore'
 import { useGameType } from '@/hooks/useGameType'
-import { useSocket } from '@/hooks/useSocket'
-import { userStore } from '@/store/userStore'
-
-// import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type'
-
-// import { useQuizizzActivityStore } from '@/store/quizizzActivity'
 
 interface HeaderProps {
   quetionsList?: IQuizizzsQuestion[]
   currentQuestion?: number
+  handleOutGame?: () => void
+  setResult?: React.Dispatch<React.SetStateAction<boolean[]>>
 }
 
-const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
-  const navigate = useNavigate()
-  const { user } = userStore((state) => state)
+const Header = ({ quetionsList, currentQuestion, handleOutGame, setResult }: HeaderProps) => {
   const { id } = useParams()
   const gameType = useGameType()
   /* connect socket */
-  const socket = useSocket()
   const [openModal, setOpenModal] = useState<string | undefined>()
   const props = { openModal, setOpenModal }
   /* lấy ra kết quả đúng */
-  const [_, setResult] = useState<boolean[]>([])
-  const { answerResult, answers, setCurrentQuestion } = useGameSolo((state) => state)
+  const { answerResult, rank } = useGameSolo((state) => state)
+
   useEffect(() => {
-    if (answerResult) {
+    if (answerResult && setResult) {
       setResult((prev) => [...prev, answerResult.result])
     }
   }, [answerResult])
-  const handleOutGame = async () => {
-    /* lưu lại thông tin phiên trò chơi */
-    const body = {
-      userId: user._id,
-      quizizzExamId: id,
-      answers: answers,
-      isCompleted: false
-    }
-    const result = await useFilterDuplicate(body)
-    console.log('🚀 ~ file: Header.tsx:42 ~ handleOutGame ~ result:', result)
-    socket.emit('addQuizizzActivity', result)
-    /* reset */
-    useGameSolo.setState({
-      answerResult: null as any,
-      selectAnswer: null as any
-    })
-    setCurrentQuestion(0)
-    setResult([])
-    navigate('/')
-  }
 
-  // useEffect(() => {
-  //   if (!socket) return
-  //   if (quetionsList) {
-  //     if (answers.length <= quetionsList?.length) {
-  //       socket.on('quizizzActivity', (data: IQuizizzActivity) => {
-  //         useQuizizzActivityStore.setState({ quizizzActivitie: data })
-  //         useQuizizzActivityStore.setState((state) => ({
-  //           quizizzActivities: [...state.quizizzActivities, data]
-  //         }))
-  //         navigate(`/`)
-  //       })
-  //     }
-  //   }
-  //   return () => {
-  //     socket.off('quizizzActivity')
-  //     socket.disconnect()
-  //   }
-  // }, [socket, quetionsList, answers])
   return (
     <>
       <div className='h-16 w-full flex justify-between items-center p-4 bg-[#000]'>
@@ -94,16 +49,20 @@ const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
               </div>
             </Link>
           )}
-          <div className='cursor-pointer h-10 w-10 rounded-lg !text-white flex justify-center items-center bg-[#333]'>
-            <VscClose size={20} />
-          </div>
           {quetionsList && quetionsList.length > 0 && (
             <div className='h-10 rounded-lg !text-white px-4 flex justify-center items-center bg-[#333]'>
               {currentQuestion && currentQuestion + 1}/{quetionsList.length}
             </div>
           )}
         </div>
-        <div className=''>hehe</div>
+        <div className=''>
+          <div className='cursor-pointer w-[104px] gap-2 h-10 rounded-lg !text-white flex justify-center items-center bg-[#333]'>
+            <span>
+              <FaMedal size={20} />
+            </span>
+            <span>{rank ? rank : <AiOutlineMinus />}</span>
+          </div>
+        </div>
       </div>
       <Modal
         size={'lg'}
@@ -120,15 +79,7 @@ const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
                   className={`h-[20px] w-full rounded-xl bg-white grid grid-cols-${quetionsList.length} overflow-hidden`}
                 >
                   {quetionsList.map((questionItem, _) => {
-                    return (
-                      // <div
-                      //   key={questionItem._id}
-                      //   className={`h-full w-full ${
-                      //     result.length > 0 ? (result[index] ? 'bg-green-500' : 'bg-red-500') : ''
-                      //   }`}
-                      // ></div>
-                      <div key={questionItem._id} className='h-full w-full bg-green-500'></div>
-                    )
+                    return <div key={questionItem._id} className='h-full w-full bg-green-500'></div>
                   })}
                 </div>
               )}
@@ -146,7 +97,9 @@ const Header = ({ quetionsList, currentQuestion }: HeaderProps) => {
               </button>
               <button
                 className='rounded-lg w-1/2 py-[12px] text-xl bg-white text-black font-bold px-3'
-                onClick={() => handleOutGame()}
+                onClick={() => {
+                  handleOutGame && handleOutGame()
+                }}
               >
                 Lưu và thoát
               </button>

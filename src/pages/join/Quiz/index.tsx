@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import { VscDebugStart } from 'react-icons/vsc'
 import { caculatorPercent } from '@/utils/caculatorPercent'
 import moment from 'moment'
+import { useGameSolo } from '@/store/gameStore'
 import { useQuizizzActivityStore } from '@/store/quizizzActivity'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { userStore } from '@/store/userStore'
@@ -18,6 +19,7 @@ const PreQuiz = () => {
   const { user } = userStore((state) => state)
   const { quizizzExam, getOneQuizizzExam, isLoading } = useQuizizzExamStore((state) => state)
   const { quizizzActivities, getAllQuizActivity } = useQuizizzActivityStore((state) => state)
+  const { rank } = useGameSolo((state) => state)
   const [percent, setPercent] = useState<number[]>([])
   useEffect(() => {
     if (quizizzActivities && quizizzActivities.length > 0) {
@@ -31,6 +33,9 @@ const PreQuiz = () => {
       getAllQuizActivity({ userId: user._id, roomId: id })
     }
   }, [id])
+  useEffect(() => {
+    useGameSolo.setState({ rank: null })
+  }, [rank])
   return (
     <div className='min-h-screen bg-black'>
       <Header />

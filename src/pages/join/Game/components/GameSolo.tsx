@@ -20,6 +20,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
   const navigate = useNavigate()
   const { id } = useParams()
   const [finish, setFinish] = useState(false)
+  const [_, setResult] = useState<boolean[]>([])
   /* connect socket */
   const socket = useSocket()
   /* store */
@@ -29,6 +30,7 @@ const GameSolo = ({ questions }: GameSoloProps) => {
     selectAnswer,
     currentQuestion,
     answers,
+    score: scoreResult,
     setCurrentQuestion
   } = useGameSolo((state) => state)
 
@@ -69,6 +71,28 @@ const GameSolo = ({ questions }: GameSoloProps) => {
       useGameSolo.setState(() => ({
         answers: [...arrayAnswers, answerItem]
       }))
+      /* nếu mà trả lời đúng thì cộng điểm câu hỏi đấy vào */
+      if (data.result) {
+        useGameSolo.setState((state) => ({
+          score: state.score + quetionsList[currentQuestion].score
+        }))
+      }
+      /* dựa vào điểm của người dùng sếp thứ hạng của người đang chơi với những người khác */
+      const body = {
+        userId: user._id,
+        score: Math.ceil(scoreResult / 2)
+      }
+      // thêm vào mảng scores
+      useGameSolo.setState((state) => ({
+        scores: [...state.scores, body]
+      }))
+      // tìm ra vị trí của người chơi trong mảng scores
+      const index = useGameSolo
+        .getState()
+        .scores.sort((a, b) => b.score - a.score)
+        .findIndex((item) => item.userId === user._id)
+      useGameSolo.setState({ rank: index + 1 })
+      /* chuyển câu hỏi tiếp theo */
       setTimeout(async () => {
         const nextQuestion = currentQuestion + 1
         if (nextQuestion < quetionsList.length) {
@@ -90,11 +114,14 @@ const GameSolo = ({ questions }: GameSoloProps) => {
           const body = {
             userId: user._id,
             quizizzExamId: id,
-            answers: answers
+            answers: answers,
+            score: Math.ceil(scoreResult / 2)
           }
           const result = await useFilterDuplicate(body)
           if (result.answers.length === questions[0].questions.length) {
             socket.emit('addQuizizzActivity', result)
+            useGameSolo.setState({ answers: [] })
+            useGameSolo.setState({ score: 0 })
           }
         }
       }, 2000)
@@ -128,11 +155,51 @@ const GameSolo = ({ questions }: GameSoloProps) => {
       quizizzExamQuestionAnswerId: id
     })
   }
+
+  /* sứ lý sự kiện out game giữa chừng */
+  const handleOutGame = async () => {
+    /* lưu lại thông tin phiên trò chơi */
+    const body = {
+      userId: user._id,
+      quizizzExamId: id,
+      answers: answers,
+      isCompleted: false
+    }
+    const result = await useFilterDuplicate(body)
+    console.log('🚀 ~ file: Header.tsx:42 ~ handleOutGame ~ result:', result)
+    socket.emit('addQuizizzActivity', result)
+    /* reset */
+    useGameSolo.setState({
+      answerResult: null as any,
+      selectAnswer: null as any
+    })
+    setCurrentQuestion(0)
+    setResult([])
+    navigate('/')
+  }
+
+  /* nhận số điểm của những người chơi trước */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('scores', (data: any) => {
+      /* lấy ra userId và score */
+      const scores = data.map((item: any) => {
+        const { userId, score } = item
+        return { userId, score }
+      })
+      useGameSolo.setState({ scores })
+    })
+  }, [socket])
   if (!quetionsList.length) return null
   return (
     <>
       <div className='flex flex-col h-screen bg-black select-none'>
-        <Header quetionsList={quetionsList} currentQuestion={currentQuestion} />
+        <Header
+          handleOutGame={handleOutGame}
+          quetionsList={quetionsList}
+          currentQuestion={currentQuestion}
+          setResult={setResult}
+        />
         <div className='flex-1 p-2'>
           <div className='bg-[#461A42] h-full rounded-2xl p-2'>
             <div className='h-1/2'>

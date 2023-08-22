@@ -1,5 +1,4 @@
 import { AnswerResult } from '@/pages/join/Game/interface/answerResult'
-import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type'
 import { IQuizizzsQuestion } from '@/interfaces/quizizzExam.type'
 
 export type SelectAnswer = { index: number; id: string }
@@ -10,9 +9,9 @@ export type GameStoreState = {
   answerResult: null | AnswerResult
   currentQuestion: number
   answers: any[]
-  scores: IQuizizzActivity[]
+  scores: any[]
   score: number
-  indexSort: number
+  rank: number | null
   scoreSort: { score: number; id: string }[]
 }
 
