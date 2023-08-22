@@ -1,11 +1,11 @@
+import { Outlet, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import Header from '../pages/admin/components/Header'
 import Sidebar from '../pages/admin/MyLibrary/components/Sidebar'
-import { useSearchParams } from 'react-router-dom'
 
 interface LayoutAdminProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const LayoutAdmin = ({ children }: LayoutAdminProps) => {
@@ -21,8 +21,7 @@ const LayoutAdmin = ({ children }: LayoutAdminProps) => {
     <div className='flex'>
       <Sidebar />
       <div className='flex-1 bg-[#F2F2F2]'>
-        <Header />
-        {children}
+        <Outlet />
       </div>
     </div>
   )

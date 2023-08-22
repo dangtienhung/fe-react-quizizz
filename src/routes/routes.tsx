@@ -3,6 +3,7 @@ import { Navigate, Outlet, createBrowserRouter, useNavigate } from 'react-router
 import CreateByMe from '@/pages/admin/Quiz/CreateByMe'
 import CreateQuestion from '@/pages/admin/Quiz/CreateQuestion'
 import HomePage from '@/pages/home'
+import LayoutAdmin from '@/layouts/LayoutAdmin'
 import MyLibrary from '@/pages/admin/MyLibrary'
 import PreQuiz from '@/pages/join/Quiz'
 import QuizEdit from '@/pages/admin/Quiz/Edit'
@@ -44,15 +45,21 @@ export const router = createBrowserRouter([
     element: <PrivateRoute />,
     children: [
       { index: true, element: <Navigate to='my-library' /> },
-      { path: 'my-library', element: <MyLibrary /> },
+      { path: 'my-library', element: <LayoutAdmin />, children: [{ index: true, element: <MyLibrary /> }] },
+      {
+        path: 'quiz',
+        element: <LayoutAdmin />,
+        children: [
+          { index: true, element: <Navigate to='/admin/my-library' /> },
+          { path: ':id', element: <CreateByMe /> }
+        ]
+      },
       {
         path: 'quiz',
         children: [
-          { index: true, element: <Navigate to='admin' /> },
           { path: 'lists/:id', element: <QuizLists /> },
           { path: 'edit/:id', element: <QuizEdit /> },
-          { path: 'questions/create/:id', element: <CreateQuestion /> },
-          { path: ':id', element: <CreateByMe /> }
+          { path: 'questions/create/:id', element: <CreateQuestion /> }
         ]
       }
     ]
