@@ -88,10 +88,97 @@ const Presentation = () => {
                   <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
                     <AiOutlineEyeInvisible />
                   </div>
-                  <div
-                    onClick={() => handleKickGame()}
-                    className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'
-                  >
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <IoClose color='text-white' />
+                  </div>
+                </div>
+              </div>
+              <div className='flex last:mb-0 mb-4 gap-3 bg-[#161616] items-center p-3 rounded-lg justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img
+                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster1.png'
+                    alt='logo'
+                    className='h-11 w-11 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>Lorem, ipsum dolor.</p>
+                </div>
+                <div className='text-white flex items-center gap-3'>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <AiOutlineEyeInvisible />
+                  </div>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <IoClose color='text-white' />
+                  </div>
+                </div>
+              </div>
+              <div className='flex last:mb-0 mb-4 gap-3 bg-[#161616] items-center p-3 rounded-lg justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img
+                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster1.png'
+                    alt='logo'
+                    className='h-11 w-11 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>Lorem, ipsum dolor.</p>
+                </div>
+                <div className='text-white flex items-center gap-3'>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <AiOutlineEyeInvisible />
+                  </div>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <IoClose color='text-white' />
+                  </div>
+                </div>
+              </div>
+              <div className='flex last:mb-0 mb-4 gap-3 bg-[#161616] items-center p-3 rounded-lg justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img
+                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster1.png'
+                    alt='logo'
+                    className='h-11 w-11 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>Lorem, ipsum dolor.</p>
+                </div>
+                <div className='text-white flex items-center gap-3'>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <AiOutlineEyeInvisible />
+                  </div>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <IoClose color='text-white' />
+                  </div>
+                </div>
+              </div>
+              <div className='flex last:mb-0 mb-4 gap-3 bg-[#161616] items-center p-3 rounded-lg justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img
+                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster1.png'
+                    alt='logo'
+                    className='h-11 w-11 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>Lorem, ipsum dolor.</p>
+                </div>
+                <div className='text-white flex items-center gap-3'>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <AiOutlineEyeInvisible />
+                  </div>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <IoClose color='text-white' />
+                  </div>
+                </div>
+              </div>
+              <div className='flex last:mb-0 mb-4 gap-3 bg-[#161616] items-center p-3 rounded-lg justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img
+                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster1.png'
+                    alt='logo'
+                    className='h-11 w-11 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>Lorem, ipsum dolor.</p>
+                </div>
+                <div className='text-white flex items-center gap-3'>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
+                    <AiOutlineEyeInvisible />
+                  </div>
+                  <div className='h-9 w-9 flex justify-center cursor-pointer hover:bg-[#2E2E2E] duration-500 transition-all hover:scale-125 items-center rounded-full text-white'>
                     <IoClose color='text-white' />
                   </div>
                 </div>
