@@ -5,6 +5,7 @@ import CreateQuestion from '@/pages/admin/Quiz/CreateQuestion'
 import HomePage from '@/pages/home'
 import LayoutAdmin from '@/layouts/LayoutAdmin'
 import MyLibrary from '@/pages/admin/MyLibrary'
+import PreGameLive from '@/pages/join/Live/PreGame'
 import PreQuiz from '@/pages/join/Quiz'
 import Presentation from '@/pages/admin/Presentation'
 import QuizEdit from '@/pages/admin/Quiz/Edit'
@@ -38,7 +39,8 @@ export const router = createBrowserRouter([
       { path: 'topic/:id', element: <Toppic /> },
       { path: 'quiz/:id', element: <PreQuiz /> },
       { path: 'game/:id', element: <QuizizzGame /> },
-      { path: 'settings', element: <Setting /> }
+      { path: 'settings', element: <Setting /> },
+      { path: 'pre-game/running/:id/start', element: <PreGameLive /> }
     ]
   },
   {
