@@ -173,7 +173,10 @@ const CreateByMe = () => {
                     <AiOutlineEye />
                     Hiện thị đáp án
                   </div>
-                  <div className='flex items-center gap-1 py-1 border px-2 cursor-pointer rounded bg-[#fff] font-semibold text-black text-sm'>
+                  <div
+                    onClick={() => navigate(`/join/quiz/${id}`)}
+                    className='flex items-center gap-1 py-1 border px-2 cursor-pointer rounded bg-[#fff] font-semibold text-black text-sm'
+                  >
                     <MdPlayArrow />
                     Xem trước
                   </div>

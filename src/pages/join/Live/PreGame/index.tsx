@@ -34,7 +34,7 @@ const PreGameLive = () => {
                 </button>
               </div>
             </div>
-            <Link to={`/join/game/123?type=solo`} className='inline-block w-full'>
+            <Link to={`/join/game/loppy/123`} className='inline-block w-full'>
               <button
                 className='btn shadow-md w-full bg-[#00C985] hover:bg-[#00C985] font-bold outline-none border-none text-white'
                 style={{ boxShadow: '#00a06a 0px 4px 0px 0px' }}

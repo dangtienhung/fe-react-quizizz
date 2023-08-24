@@ -5,20 +5,31 @@ import { MdOutlineWatchLater } from 'react-icons/md'
 import { getQuizs } from '@/api/quizizz'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
+import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { userStore } from '@/store/userStore'
 
-// import { useNavigate } from 'react-router-dom'
+enum QuizizzType {
+  TEACHERLIVE = 'TEACHERLIVE',
+  MUTIPLELIVE = 'MUTIPLELIVE'
+}
 
 const ListQuizizz = () => {
   const navigate = useNavigate()
-  // const navigate = useNavigate()
   const { user } = userStore((state) => state)
+  const { getOneQuizzExamByQuestionId, quizizzExam } = useQuizizzExamStore((state) => state)
   const { data } = useQuery({
     queryKey: ['students'],
     queryFn: () => getQuizs(user._id),
     keepPreviousData: true
   })
-  console.log('🚀 ~ file: ListQuizizz.tsx:17 ~ ListQuizizz ~ data:', data)
+  const handleGetQuizizzExam = async (id: string, type: QuizizzType) => {
+    await getOneQuizzExamByQuestionId(id)
+    if (type === QuizizzType.TEACHERLIVE) {
+      navigate(`/admin/presentation/${quizizzExam._id}`)
+      return
+    }
+    navigate(`/admin/quiz/${quizizzExam._id}`)
+  }
   return (
     <div className='flex-1 w-full'>
       {data && data.data.length === 0 && (
@@ -92,7 +103,7 @@ const ListQuizizz = () => {
                           </div>
                           <div className='absolute select-none top-full w-[200px] -left-[200px] border bg-white shadow-md rounded hidden group-hover/item:block before:absolute before:h-8 before:w-1/2 before:top-[-16px] before:left-2/3'>
                             <div
-                              onClick={() => navigate(`/admin/quiz/${item._id}`)}
+                              onClick={() => handleGetQuizizzExam(item._id, QuizizzType.MUTIPLELIVE)}
                               className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'
                             >
                               <MdOutlineWatchLater />

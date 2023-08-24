@@ -39,7 +39,7 @@ const Header = ({ className, quizizz }: HeaderProps) => {
     if (quizizz) {
       setOpenModal(undefined)
       console.log({ title: data.title, questions: [quizizz._id], user: [quizizz.user._id] })
-      createQuizizzExam({ title: data.title, questions: [quizizz._id], user: [quizizz.user._id] })
+      createQuizizzExam({ title: data.title, questions: [quizizz._id], user: [quizizz.user._id], code: '' })
       navigate('/admin/my-library')
     }
   }
