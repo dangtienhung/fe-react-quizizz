@@ -2,7 +2,6 @@ import { AiFillSound } from 'react-icons/ai'
 import Header from '../../components/Header'
 import { Link } from 'react-router-dom'
 import { MdOutlinePublishedWithChanges } from 'react-icons/md'
-import React from 'react'
 import { VscDebugStart } from 'react-icons/vsc'
 
 const PreGameLive = () => {

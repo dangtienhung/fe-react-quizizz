@@ -1,4 +1,4 @@
-import { IQuizizzExam, IQuizizzExamCreate, IQuizizzQuestionExam } from '@/interfaces/quizizzExam.type'
+import { IQuizizzExam, IQuizizzExamCreate } from '@/interfaces/quizizzExam.type'
 import { IQuizizzExamAction, IQuizizzExamState } from './types/quizizzExam'
 import { createQuizizzExam, getAllQuizExam, getExamByQuestionId, getOneQuizExam } from '@/api/quizExam'
 import { devtools, persist } from 'zustand/middleware'

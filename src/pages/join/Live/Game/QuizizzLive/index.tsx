@@ -8,6 +8,7 @@ import { useState } from 'react'
 const QuizizzLive = () => {
   const [isKickOutGame, setIsKickOutGame] = useState<boolean>(false)
   const handleKickGame = (id?: number) => {
+    console.log('🚀 ~ file: index.tsx:11 ~ handleKickGame ~ id:', id)
     setIsKickOutGame(!isKickOutGame)
   }
   return (
