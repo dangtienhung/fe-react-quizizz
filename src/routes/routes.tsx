@@ -12,6 +12,7 @@ import Presentation from '@/pages/admin/Presentation'
 import QuizEdit from '@/pages/admin/Quiz/Edit'
 import QuizLists from '@/pages/admin/Quiz/Lists/Lists'
 import QuizizzGame from '@/pages/join/Game'
+import QuizizzLive from '@/pages/join/Live/Game/QuizizzLive'
 import Setting from '@/pages/join/Setting/Setting'
 import Toppic from '@/pages/join/Topic'
 import { useEffect } from 'react'
@@ -64,10 +65,17 @@ export const router = createBrowserRouter([
         children: [
           { path: 'lists/:id', element: <QuizLists /> },
           { path: 'edit/:id', element: <QuizEdit /> },
-          { path: 'questions/create/:id', element: <CreateQuestion /> }
+          { path: 'questions/create/:id', element: <CreateQuestion /> },
+          { path: 'game-live/:id', element: <QuizizzLive /> }
         ]
       },
-      { path: 'presentation/:id', element: <Presentation /> }
+      {
+        path: 'presentation',
+        children: [
+          { index: true, element: <Navigate to='/admin/my-library' /> },
+          { path: ':id', element: <Presentation /> }
+        ]
+      }
     ]
   }
 ])

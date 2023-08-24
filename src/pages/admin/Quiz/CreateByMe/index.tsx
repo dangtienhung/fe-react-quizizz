@@ -1,6 +1,7 @@
 import { AiOutlineEye, AiOutlineHeart, AiOutlinePrinter, AiOutlineSetting } from 'react-icons/ai'
 import { BsCheck2Circle, BsCheckSquare, BsDownload, BsListCheck, BsTrash3 } from 'react-icons/bs'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { BiSolidEditAlt } from 'react-icons/bi'
 import { CiEdit } from 'react-icons/ci'
@@ -13,6 +14,8 @@ import { MdPlayArrow } from 'react-icons/md'
 import { useState } from 'react'
 
 const CreateByMe = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <LayoutOutLibrary>
@@ -121,7 +124,7 @@ const CreateByMe = () => {
                       <div
                         className='flex justify-start items-center gap-2 border-b py-2'
                         onClick={() => {
-                          console.log('ahihi')
+                          navigate(`/admin/quiz/game-live/${id}`)
                         }}
                       >
                         <span className='bg-[#EDE6F6] p-3 rounded-lg'>
@@ -132,7 +135,10 @@ const CreateByMe = () => {
                           <p className='text-sm'>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
                         </div>
                       </div>
-                      <div className='flex justify-start items-center gap-2 py-2'>
+                      <div
+                        onClick={() => navigate(`/admin/presentation/${id}`)}
+                        className='flex justify-start items-center gap-2 py-2'
+                      >
                         <span className='bg-[#EDE6F6] p-3 rounded-lg'>
                           <FaUsers size={24} />
                         </span>

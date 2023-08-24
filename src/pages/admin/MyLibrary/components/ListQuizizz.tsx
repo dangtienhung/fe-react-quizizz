@@ -3,12 +3,14 @@ import { IQuizizzs } from '@/interfaces/quizizz.type'
 import { IoMdArrowDropdown } from 'react-icons/io'
 import { MdOutlineWatchLater } from 'react-icons/md'
 import { getQuizs } from '@/api/quizizz'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { userStore } from '@/store/userStore'
 
 // import { useNavigate } from 'react-router-dom'
 
 const ListQuizizz = () => {
+  const navigate = useNavigate()
   // const navigate = useNavigate()
   const { user } = userStore((state) => state)
   const { data } = useQuery({
@@ -89,15 +91,24 @@ const ListQuizizz = () => {
                             <IoMdArrowDropdown />
                           </div>
                           <div className='absolute select-none top-full w-[200px] -left-[200px] border bg-white shadow-md rounded hidden group-hover/item:block before:absolute before:h-8 before:w-1/2 before:top-[-16px] before:left-2/3'>
-                            <div className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                            <div
+                              onClick={() => navigate(`/admin/quiz/${item._id}`)}
+                              className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'
+                            >
                               <MdOutlineWatchLater />
                               Quiz trực tiếp
                             </div>
-                            <div className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                            <div
+                              onClick={() => navigate(`/admin/presentation/${item._id}`)}
+                              className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'
+                            >
                               <MdOutlineWatchLater />
                               Giáo viên điều khiển
                             </div>
-                            <div className='cursor-pointer text-sm py-2 flex gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'>
+                            <div
+                              onClick={() => navigate(`/join/quiz/${item._id}`)}
+                              className='cursor-pointer text-sm py-2 flex gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'
+                            >
                               <MdOutlineWatchLater />
                               Bài tập về nhà
                             </div>

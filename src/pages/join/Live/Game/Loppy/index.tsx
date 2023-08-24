@@ -5,7 +5,7 @@ const LoppyGame = () => {
   return (
     <div
       style={{ backgroundImage: "url('https://cf.quizizz.com/themes/v2/cosmic-picnic/bg_image_1080p.jpg')" }}
-      className='min-h-screen bg-center bg-cover bg-no-repeat w-full text-white -z-10'
+      className='select-none min-h-screen bg-center bg-cover bg-no-repeat w-full text-white -z-10'
     >
       <Header />
       <div className='border-b mb-8'>
@@ -36,7 +36,7 @@ const LoppyGame = () => {
           </div>
         </div>
       </div>
-      <div className='py-10 w-full mx-auto max-w-5xl xl:max-w-7xl grid grid-cols-5 gap-10'>
+      <div className='py-10 w-full mx-auto max-w-5xl xl:max-w-7xl grid px-10 grid-cols-5 gap-10'>
         {[1, 2, 3, 4, 5, 6, 7, 8].map(() => {
           return (
             <div key={Math.random()} className='border border-gray-200 p-4 rounded-xl flex items-center gap-3'>
