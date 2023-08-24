@@ -14,4 +14,6 @@ export type IQuizizzExamAction = {
   getOneQuizizzExam: (id: string) => void
   /* create quiz exam */
   createQuizizzExam: (data: IQuizizzExamCreate) => void
+  /* get exam by questionId */
+  getOneQuizzExamByQuestionId: (id: string) => void
 }

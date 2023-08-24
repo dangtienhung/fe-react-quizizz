@@ -1,6 +1,6 @@
-import { IQuizizzExam, IQuizizzExamCreate } from '@/interfaces/quizizzExam.type'
+import { IQuizizzExam, IQuizizzExamCreate, IQuizizzQuestionExam } from '@/interfaces/quizizzExam.type'
 import { IQuizizzExamAction, IQuizizzExamState } from './types/quizizzExam'
-import { createQuizizzExam, getAllQuizExam, getOneQuizExam } from '@/api/quizExam'
+import { createQuizizzExam, getAllQuizExam, getExamByQuestionId, getOneQuizExam } from '@/api/quizExam'
 import { devtools, persist } from 'zustand/middleware'
 
 import { create } from 'zustand'
@@ -47,6 +47,18 @@ export const useQuizizzExamStore = create<IQuizizzExamState & IQuizizzExamAction
           } catch (error: any) {
             set({ isLoading: false })
             set({ error: error.response.data.message })
+          }
+        },
+        /* get exam by questionId */
+        getOneQuizzExamByQuestionId: async (id: string) => {
+          set({ isLoading: true })
+          try {
+            const data = await getExamByQuestionId(id)
+            set({ isLoading: false })
+            set({ quizizzExam: data })
+          } catch (error: any) {
+            set({ error: error })
+            set({ isLoading: false })
           }
         }
       }),

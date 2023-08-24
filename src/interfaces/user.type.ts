@@ -26,5 +26,6 @@ export interface IUser {
 export interface UserActivity {
   _id: string
   name: string
+  email?: string
   avatar: string
 }

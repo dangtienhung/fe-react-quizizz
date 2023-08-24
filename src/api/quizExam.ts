@@ -18,3 +18,15 @@ export const createQuizizzExam = async (data: IQuizizzExamCreate) => {
   const response = await http.post('/quizizz-exam/create', data)
   return response
 }
+
+/* get exam by code */
+export const getExamByCode = async (code: string) => {
+  const response = await http.get(`/quizizz-exam/get-code-exam/${code}`)
+  return response.data
+}
+
+/* get exam by questionId */
+export const getExamByQuestionId = async (id: string) => {
+  const response = await http.get(`/quizizz-exam/get-quizizz-exam-by-question-id/${id}`)
+  return response.data
+}

@@ -1,3 +1,5 @@
+import { UserActivity } from './user.type'
+
 export interface IQuizizzsAnswer {
   _id: string
   content: string
@@ -19,7 +21,8 @@ export interface IQuizizzQuestionExam {
 export interface IQuizizzExam {
   _id: string
   title: string
-  user: []
+  code: string
+  user: UserActivity[]
   questions: IQuizizzQuestionExam[]
   isPublic: boolean
   plays: number
@@ -36,6 +39,7 @@ export interface IQuizizzExamCreate {
   questions: string[]
   thumbnail?: string
   user: string[]
+  code: string
 }
 
 export interface IQuizizzExamActivity {
