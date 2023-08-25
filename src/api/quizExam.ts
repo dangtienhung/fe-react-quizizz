@@ -1,4 +1,5 @@
-import { IQuizizzExamCreate } from '@/interfaces/quizizzExam.type'
+import { IQuizizzExam, IQuizizzExamCreate } from '@/interfaces/quizizzExam.type'
+
 import http from './instance'
 
 /* get all */
@@ -21,8 +22,12 @@ export const createQuizizzExam = async (data: IQuizizzExamCreate) => {
 
 /* get exam by code */
 export const getExamByCode = async (code: string) => {
-  const response = await http.get(`/quizizz-exam/get-code-exam/${code}`)
-  return response.data
+  try {
+    const response = await http.get<IQuizizzExam>(`/quizizz-exam/get-code-exam/${code}`)
+    return response.data
+  } catch (error) {
+    return null
+  }
 }
 
 /* get exam by questionId */

@@ -22,6 +22,7 @@ export interface IQuizizzExam {
   _id: string
   title: string
   code: string
+  players: any[]
   user: UserActivity[]
   questions: IQuizizzQuestionExam[]
   isPublic: boolean

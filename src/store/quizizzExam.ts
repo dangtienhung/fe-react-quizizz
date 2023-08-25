@@ -1,6 +1,6 @@
 import { IQuizizzExam, IQuizizzExamCreate } from '@/interfaces/quizizzExam.type'
 import { IQuizizzExamAction, IQuizizzExamState } from './types/quizizzExam'
-import { createQuizizzExam, getAllQuizExam, getExamByQuestionId, getOneQuizExam } from '@/api/quizExam'
+import { createQuizizzExam, getAllQuizExam, getExamByCode, getExamByQuestionId, getOneQuizExam } from '@/api/quizExam'
 import { devtools, persist } from 'zustand/middleware'
 
 import { create } from 'zustand'
@@ -60,6 +60,16 @@ export const useQuizizzExamStore = create<IQuizizzExamState & IQuizizzExamAction
             set({ error: error })
             set({ isLoading: false })
           }
+        },
+        /* get exam by code game */
+        getOneQuizExamByCode: async (code: string): Promise<IQuizizzExam> => {
+          set({ isLoading: true })
+          const data = await getExamByCode(code)
+          if (!data || data === null) {
+            set({ error: 'Exam not found' })
+          }
+          set({ isLoading: false })
+          return data as IQuizizzExam
         }
       }),
       {

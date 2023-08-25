@@ -1,6 +1,7 @@
 import { AiOutlineEye, AiOutlineHeart, AiOutlinePrinter, AiOutlineSetting } from 'react-icons/ai'
 import { BsCheck2Circle, BsCheckSquare, BsDownload, BsListCheck, BsTrash3 } from 'react-icons/bs'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { BiSolidEditAlt } from 'react-icons/bi'
@@ -11,12 +12,15 @@ import { GoCopy } from 'react-icons/go'
 import LayoutOutLibrary from '../../layouts/LayoutOutLibrary'
 import { LiaShareSolid } from 'react-icons/lia'
 import { MdPlayArrow } from 'react-icons/md'
-import { useState } from 'react'
+import { calculateDaysAgo } from '@/utils/calculateDaysAgo'
+import { useQuizizzExamStore } from '@/store/quizizzExam'
 
 const CreateByMe = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { quizizzExam } = useQuizizzExamStore((state) => state)
+  if (!quizizzExam) return null
   return (
     <LayoutOutLibrary>
       <div className='p-6 select-none'>
@@ -68,8 +72,8 @@ const CreateByMe = () => {
                     className='rounded-full h-[32px] w-[32px] object-cover'
                   />
                   <div className=''>
-                    <p className='text-xs truncate'>đặng tiến hưng</p>
-                    <p className='text-[11px]'>8 ngày trước</p>
+                    <p className='text-xs truncate'>{quizizzExam?.user[0].name}</p>
+                    <p className='text-[11px]'>{calculateDaysAgo(quizizzExam.createdAt)}</p>
                   </div>
                 </div>
                 <div className='flex gap-2 items-center'>
@@ -156,8 +160,8 @@ const CreateByMe = () => {
                   <FaUsers size={24} />
                 </span>
                 <div className='flex-1'>
-                  <span className='font-semibold text-[#D6C5EA] text-xs'>Thông thường</span>
-                  <p className='font-bold'>Bắt đầu quiz trực tiếp</p>
+                  <span className='font-semibold text-[#D6C5EA] text-xs'>Học không đồng bộ</span>
+                  <p className='font-bold'>Giao bài tập về nhà</p>
                 </div>
               </div>
             </div>
@@ -166,7 +170,9 @@ const CreateByMe = () => {
               <div className='flex items-center justify-between my-5'>
                 <div className='flex items-center gap-1'>
                   <BsListCheck />
-                  <span className='text-secondary font-semibold'>10 câu hỏi</span>
+                  <span className='text-secondary font-semibold'>
+                    {quizizzExam?.questions[0]?.questions?.length} câu hỏi
+                  </span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <div className='flex items-center gap-1 py-1 border px-2 cursor-pointer rounded bg-[#fff] font-semibold text-black text-sm'>
@@ -183,91 +189,41 @@ const CreateByMe = () => {
                 </div>
               </div>
               <div className='mt-2'>
-                <div className='mb-5 bg-white border rounded-lg select-none'>
-                  <div className=''>
-                    <div className='flex bg-[#F9F9F9] rounded-lg p-2 justify-between items-center w-full'>
-                      <div className='flex items-center gap-2'>
-                        <BsCheckSquare />
-                        <span className='text-sm'>Câu hỏi 1</span>
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        <div className='flex items-center gap-1 px-2 py-1 border rounded cursor-pointer'>
-                          <CiEdit />
-                          <span className='text-sm font-semibold'>Chỉnh sửa</span>
+                {quizizzExam &&
+                  quizizzExam.questions[0]?.questions?.map((item, index) => (
+                    <div key={item._id} className='mb-5 bg-white border rounded-lg select-none'>
+                      <div className=''>
+                        <div className='flex bg-[#F9F9F9] rounded-lg p-2 justify-between items-center w-full'>
+                          <div className='flex items-center gap-2'>
+                            <BsCheckSquare />
+                            <span className='text-sm'>Câu hỏi {index + 1}</span>
+                          </div>
+                          <div className='flex items-center gap-2'>
+                            <div className='flex items-center gap-1 px-2 py-1 border rounded cursor-pointer'>
+                              <CiEdit />
+                              <span className='text-sm font-semibold'>Chỉnh sửa</span>
+                            </div>
+                            <div className='flex items-center gap-2 px-2 py-1 border rounded cursor-pointer'>
+                              <BsCheck2Circle size={14} />
+                              <span className='text-sm font-semibold'>{item.score} điểm</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className='flex items-center gap-2 px-2 py-1 border rounded cursor-pointer'>
-                          <BsCheck2Circle size={14} />
-                          <span className='text-sm font-semibold'>1 điểm</span>
+                        <div className='px-2 py-3'>{item.title}</div>
+                        <div className='relative'>
+                          <div className={`grid grid-cols-2 gap-4 px-2 py-5`}>
+                            {item.questionAnswers.map((answer) => (
+                              <div key={answer._id} className='flex items-center gap-2 truncate'>
+                                <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
+                                <p className='text-sm truncate'>{answer.content}</p>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className='px-2 py-3'>Lorem ipsum dolor sit.</div>
-                    <div className='relative'>
-                      <div className={`grid grid-cols-2 gap-4 px-2 py-5`}>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
+                        <div className='flex bg-[#F9F9F9] rounded-lg gap-4 p-2 items-center w-full'></div>
                       </div>
                     </div>
-                    <div className='flex bg-[#F9F9F9] rounded-lg gap-4 p-2 items-center w-full'></div>
-                  </div>
-                </div>
-
-                <div className='mb-5 bg-white border rounded-lg select-none'>
-                  <div className=''>
-                    <div className='flex bg-[#F9F9F9] rounded-lg p-2 justify-between items-center w-full'>
-                      <div className='flex items-center gap-2'>
-                        <BsCheckSquare />
-                        <span className='text-sm'>Câu hỏi 1</span>
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        <div className='flex items-center gap-1 px-2 py-1 border rounded cursor-pointer'>
-                          <CiEdit />
-                          <span className='text-sm font-semibold'>Chỉnh sửa</span>
-                        </div>
-                        <div className='flex items-center gap-2 px-2 py-1 border rounded cursor-pointer'>
-                          <BsCheck2Circle size={14} />
-                          <span className='text-sm font-semibold'>1 điểm</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='px-2 py-3'>Lorem ipsum dolor sit.</div>
-                    <div className='relative'>
-                      <div className={`grid grid-cols-2 gap-4 px-2 py-5`}>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                        <div className='flex items-center gap-2 truncate'>
-                          <div className={`flex-shrink-0 w-4 h-4 rounded-full bg-[#E5E5E5]`}></div>
-                          <p className='text-sm truncate'>ahihih</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex bg-[#F9F9F9] rounded-lg gap-4 p-2 items-center w-full'></div>
-                  </div>
-                </div>
+                  ))}
               </div>
             </div>
           </div>

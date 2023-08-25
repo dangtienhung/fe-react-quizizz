@@ -16,4 +16,6 @@ export type IQuizizzExamAction = {
   createQuizizzExam: (data: IQuizizzExamCreate) => void
   /* get exam by questionId */
   getOneQuizzExamByQuestionId: (id: string) => void
+  /* get exam by code game */
+  getOneQuizExamByCode: (code: string) => Promise<IQuizizzExam>
 }

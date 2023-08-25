@@ -1,15 +1,37 @@
-import { BsLink45Deg, BsThreeDotsVertical } from 'react-icons/bs'
+import { BsCheck2All, BsLink45Deg, BsThreeDotsVertical } from 'react-icons/bs'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { FaUsers } from 'react-icons/fa'
 import { FiCopy } from 'react-icons/fi'
 import Header from '../components/Header'
-import { useState } from 'react'
+import { useQuizizzExamStore } from '@/store/quizizzExam'
+import { useSocket } from '@/hooks/useSocket'
+import { userStore } from '@/store/userStore'
 
 const QuizizzLive = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const { user } = userStore((state) => state)
+  const { quizizzExam } = useQuizizzExamStore((state) => state)
+  const socket = useSocket()
+  const [copySuccess, setCopySuccess] = useState(false)
+  useEffect(() => {
+    if (!socket) return
+    /* gửi id phòng quiz đang chơi lên server */
+    socket.emit('joinRoom', { roomId: id, useId: user._id })
+  }, [socket, id])
   const [isKickOutGame, setIsKickOutGame] = useState<boolean>(false)
   const handleKickGame = (id?: number) => {
     console.log('🚀 ~ file: index.tsx:11 ~ handleKickGame ~ id:', id)
     setIsKickOutGame(!isKickOutGame)
+  }
+  const handleCopyClick = (content: string) => {
+    navigator.clipboard.writeText(content)
+    setCopySuccess(true)
+    setTimeout(() => {
+      setCopySuccess(false)
+    }, 2500)
   }
   return (
     <div
@@ -24,7 +46,12 @@ const QuizizzLive = () => {
             <div className='mb-3'>
               <p className='text-sm mb-2 font-semibold'>1. Sử dụng bất kỳ thiết nào để mở</p>
               <div className='bg-white px-2 py-1 flex items-center rounded-lg w-full max-w-xs mx-auto'>
-                <span className='flex-1 text-black font-bold text-xl'>join my quiz.com</span>
+                <span className='flex-1 text-black font-bold text-xl'>
+                  join my{' '}
+                  <span className='hover:underline' onClick={() => navigate(`/`)}>
+                    quiz.com
+                  </span>
+                </span>
                 <span className='text-black cursor-pointer h-[50px] w-[50px] bg-[#E6E6E6] rounded-lg flex items-center justify-center'>
                   <FiCopy />
                 </span>
@@ -33,10 +60,15 @@ const QuizizzLive = () => {
             <div className='mb-3'>
               <p className='text-sm mb-2 font-semibold'>2. Nhập mã trò chơi</p>
               <div className='bg-white px-2 py-1 flex items-center rounded-lg w-full max-w-xs mx-auto'>
-                <span className='flex-1 text-black font-bold tracking-widest text-2xl'>0123456</span>
-                <span className='text-black cursor-pointer h-[50px] w-[50px] bg-[#E6E6E6] rounded-lg flex items-center justify-center'>
-                  <FiCopy />
-                </span>
+                <span className='flex-1 text-black font-bold tracking-widest text-2xl'>{quizizzExam.code}</span>
+                <div className={`${copySuccess ? 'tooltip tooltip-right' : ''}`} data-tip='Đã sao chép mã trò chơi'>
+                  <span
+                    onClick={() => handleCopyClick(quizizzExam.code)}
+                    className='text-black cursor-pointer h-[50px] w-[50px] bg-[#E6E6E6] rounded-lg flex items-center justify-center'
+                  >
+                    {copySuccess ? <BsCheck2All /> : <FiCopy />}
+                  </span>
+                </div>
               </div>
             </div>
 
