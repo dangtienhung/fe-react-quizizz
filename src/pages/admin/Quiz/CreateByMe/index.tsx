@@ -1,7 +1,6 @@
 import { AiOutlineEye, AiOutlineHeart, AiOutlinePrinter, AiOutlineSetting } from 'react-icons/ai'
 import { BsCheck2Circle, BsCheckSquare, BsDownload, BsListCheck, BsTrash3 } from 'react-icons/bs'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
-import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { BiSolidEditAlt } from 'react-icons/bi'
@@ -14,6 +13,7 @@ import { LiaShareSolid } from 'react-icons/lia'
 import { MdPlayArrow } from 'react-icons/md'
 import { calculateDaysAgo } from '@/utils/calculateDaysAgo'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
+import { useState } from 'react'
 
 const CreateByMe = () => {
   const { id } = useParams()

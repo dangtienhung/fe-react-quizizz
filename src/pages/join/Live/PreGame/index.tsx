@@ -33,7 +33,6 @@ const PreGameLive = () => {
   const socket = useSocket()
   const { user, updateNameInGame } = userStore((state) => state)
   const [nameRandom, setNameRandom] = useState(user.name)
-  const { quizizzExam } = useQuizizzExamStore((state) => state)
   const handleRandomName = useCallback(async () => {
     const randomIndex = Math.floor(Math.random() * names.length)
     setNameRandom(names[randomIndex])
