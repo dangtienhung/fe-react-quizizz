@@ -2,7 +2,6 @@ import * as yup from 'yup'
 
 import { Link, useNavigate } from 'react-router-dom'
 
-import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import { Variant } from '..'
 import { useForm } from 'react-hook-form'
 import { useQuizizzExamStore } from '@/store/quizizzExam'

@@ -35,3 +35,13 @@ export const getExamByQuestionId = async (id: string) => {
   const response = await http.get(`/quizizz-exam/get-quizizz-exam-by-question-id/${id}`)
   return response.data
 }
+
+/* add player to exam */
+export const addPlayerToExam = async (roomId: string, userId: string) => {
+  try {
+    const response = await http.get(`/quizizz-exam/add-player-to-exam?roomId=${roomId}&userId=${userId}`)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}

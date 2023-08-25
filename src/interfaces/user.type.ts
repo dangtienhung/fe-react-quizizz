@@ -29,3 +29,10 @@ export interface UserActivity {
   email?: string
   avatar: string
 }
+
+export interface IPlayer {
+  _id: string
+  name: string
+  avatar: string
+  nameInGame: string
+}

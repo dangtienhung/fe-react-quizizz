@@ -1,4 +1,4 @@
-import { UserActivity } from './user.type'
+import { IPlayer, UserActivity } from './user.type'
 
 export interface IQuizizzsAnswer {
   _id: string
@@ -22,7 +22,7 @@ export interface IQuizizzExam {
   _id: string
   title: string
   code: string
-  players: any[]
+  players: IPlayer[]
   user: UserActivity[]
   questions: IQuizizzQuestionExam[]
   isPublic: boolean

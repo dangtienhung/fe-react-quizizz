@@ -1,48 +1,108 @@
+import * as yup from 'yup'
+
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+
 import { AiFillSound } from 'react-icons/ai'
 import Header from '../../components/Header'
-import { Link } from 'react-router-dom'
+import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import { MdOutlinePublishedWithChanges } from 'react-icons/md'
 import { VscDebugStart } from 'react-icons/vsc'
+import { names } from './utils/names'
+import { useForm } from 'react-hook-form'
+import { useQuizizzExamStore } from '@/store/quizizzExam'
+import { useSocket } from '@/hooks/useSocket'
+import { userStore } from '@/store/userStore'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+const schema = yup.object({
+  name: yup.string().required()
+})
 
 const PreGameLive = () => {
+  const { id } = useParams()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema)
+  })
+  const navigate = useNavigate()
+  const socket = useSocket()
+  const { user, updateNameInGame } = userStore((state) => state)
+  const [nameRandom, setNameRandom] = useState(user.name)
+  const { quizizzExam } = useQuizizzExamStore((state) => state)
+  const handleRandomName = useCallback(async () => {
+    const randomIndex = Math.floor(Math.random() * names.length)
+    setNameRandom(names[randomIndex])
+    await updateNameInGame(user._id, nameRandom)
+  }, [])
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNameRandom(e.target.value)
+  }
+  const onSubmit = async (data: { name: string }) => {
+    /* thay đổi tên người dùng */
+    socket.emit('updateName', { userId: user._id, name: nameRandom || data.name })
+    /* thêm người dùng vào game */
+    socket.emit('addPlayerToExam', { roomId: id, userId: user._id })
+  }
+  useEffect(() => {
+    if (socket) {
+      socket.on('updateName', (data: string) => {
+        if (data) {
+          socket.on('quizizzExam', (examQuiz: IQuizizzExam) => {
+            if (examQuiz) {
+              useQuizizzExamStore.setState({ quizizzExam: examQuiz })
+              navigate(`/join/game/loppy/${examQuiz._id}`)
+            }
+          })
+        }
+      })
+    }
+  }, [socket])
   return (
     <div className='min-h-screen bg-black'>
       <Header />
       <div className='flex justify-between gap-6 p-10 text-white bg-black'>
         <div className='w-[30%]'></div>
         <div className='w-[50%]'>
-          <div className='p-6 bg-[#111111] rounded-xl'>
+          <form className='p-6 bg-[#111111] rounded-xl' onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
             <div className=''>
               <h2 className='mb-1 text-sm'>Your Quizizz name is ...</h2>
               <div className='flex bg-white mb-4 rounded-lg items-center h-12'>
                 <div className='flex items-center justify-center w-8 h-8 flex-shrink-0 rounded-full'>
-                  <img
-                    src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster9.png?w=90&h=90'
-                    alt=''
-                    className='w-8 h-8 rounded-full object-cover ml-2'
-                  />
+                  <img src={`${user.avatar}`} alt='logo' className='w-8 h-8 rounded-full object-cover ml-2' />
                 </div>
                 <input
                   type='text'
-                  className='flex-1 border-none rounded-lg px-2 w-full p-2 focus:outline-none focus:!hadow-none outline-none bg-transparent text-secondary font-semibold'
+                  {...register('name')}
+                  className='flex-1 ml-2 border-none rounded-lg px-2 w-full p-2 focus:outline-none focus:!hadow-none outline-none bg-transparent text-secondary font-semibold'
                   style={{ boxShadow: 'none' }}
-                  value={'Nguyễn Văn A'}
+                  value={'' || nameRandom}
+                  onChange={(e) => handleOnChange(e)}
                 />
-                <button className='text-black h-8 w-8 cursor-pointer'>
+                <button className='text-black h-8 w-8 cursor-pointer' onClick={() => handleRandomName()}>
                   <MdOutlinePublishedWithChanges size={20} />
                 </button>
               </div>
             </div>
-            <Link to={`/join/game/loppy/123`} className='inline-block w-full'>
-              <button
-                className='btn shadow-md w-full bg-[#00C985] hover:bg-[#00C985] font-bold outline-none border-none text-white'
-                style={{ boxShadow: '#00a06a 0px 4px 0px 0px' }}
-              >
-                <VscDebugStart size={20} />
-                <span>chơi game</span>
-              </button>
-            </Link>
-          </div>
+            {errors.name && (
+              <div className='text-sm mb-4 bg-[#EC0B43] mt-3 text-white px-4 py-1 rounded' role='alert'>
+                Không được bỏ trống
+              </div>
+            )}
+            {/* <Link to={`/join/game/loppy/123`} className='inline-block w-full'> */}
+            <button
+              className='btn shadow-md w-full bg-[#00C985] hover:bg-[#00C985] font-bold outline-none border-none text-white'
+              style={{ boxShadow: '#00a06a 0px 4px 0px 0px' }}
+            >
+              <VscDebugStart size={20} />
+              <span>chơi game</span>
+            </button>
+            {/* </Link> */}
+          </form>
           <h2 className='text-secondary mt-5'>Settings</h2>
           <div className='mt-5 p-6 rounded-lg bg-[#111111]'>
             <div className='flex items-center gap-2'>

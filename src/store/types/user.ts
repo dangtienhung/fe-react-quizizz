@@ -11,4 +11,6 @@ export type UserAction = {
   registerAuth: (data: IRegister) => void
   /* login */
   loginAuth: (data: IRegister) => void
+  /* update name in game */
+  updateNameInGame: (id: string, name: string) => void
 }

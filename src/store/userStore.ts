@@ -4,6 +4,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { IRegister } from '../interfaces/user.type'
 import { create } from 'zustand'
 import http from '../api/instance'
+import { updateNameInGame } from '@/api/user.api'
 
 export const userStore = create<UserState & UserAction>()(
   devtools(
@@ -30,6 +31,16 @@ export const userStore = create<UserState & UserAction>()(
             set({ user: response.data.data, isLoading: false })
           } catch (error: any) {
             set({ isLoading: false, errors: error.response.data.message })
+          }
+        },
+        /* update name in game */
+        updateNameInGame: async (id: string, name: string) => {
+          set({ isLoading: true })
+          try {
+            await updateNameInGame(id, name)
+            set({ isLoading: false })
+          } catch (error: any) {
+            set({ isLoading: false, errors: error })
           }
         }
       }),
