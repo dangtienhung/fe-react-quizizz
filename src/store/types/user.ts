@@ -1,9 +1,10 @@
-import { IRegister, IUser } from '../../interfaces/user.type'
+import { IPlayer, IRegister, IUser } from '../../interfaces/user.type'
 
 export type UserState = {
   user: IUser
   isLoading: boolean
   errors: string
+  userIdKickGame: string
 }
 
 export type UserAction = {

@@ -5,26 +5,33 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { FaUsers } from 'react-icons/fa'
 import { FiCopy } from 'react-icons/fi'
 import Header from '../components/Header'
+import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { useSocket } from '@/hooks/useSocket'
 import { userStore } from '@/store/userStore'
 
 const QuizizzLive = () => {
-  const { id } = useParams()
+  const { id: roomId } = useParams()
   const navigate = useNavigate()
-  const { user } = userStore((state) => state)
+  const { user, userIdKickGame } = userStore((state) => state)
   const { quizizzExam } = useQuizizzExamStore((state) => state)
   const socket = useSocket()
   const [copySuccess, setCopySuccess] = useState(false)
   useEffect(() => {
     if (!socket) return
     /* gửi id phòng quiz đang chơi lên server */
-    socket.emit('joinRoom', { roomId: id, useId: user._id })
-  }, [socket, id])
+    socket.emit('joinRoom', { roomId: roomId, useId: user._id })
+  }, [socket])
   const [isKickOutGame, setIsKickOutGame] = useState<boolean>(false)
-  const handleKickGame = (id?: number) => {
-    console.log('🚀 ~ file: index.tsx:11 ~ handleKickGame ~ id:', id)
+  const handleKickGame = (id?: string) => {
+    userStore.setState({ userIdKickGame: id })
     setIsKickOutGame(!isKickOutGame)
+  }
+  const handleKickOutGame = (id: string) => {
+    if (id) {
+      socket.emit('kickOutGame', { roomId: roomId, idPlayer: id })
+      setIsKickOutGame(false)
+    }
   }
   const handleCopyClick = (content: string) => {
     navigator.clipboard.writeText(content)
@@ -33,6 +40,15 @@ const QuizizzLive = () => {
       setCopySuccess(false)
     }, 2500)
   }
+  /* nhận bài thi */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('quizizzExam', (data: IQuizizzExam) => {
+      if (data) {
+        useQuizizzExamStore.setState({ quizizzExam: data })
+      }
+    })
+  }, [socket])
   return (
     <div
       style={{ backgroundImage: "url('https://cf.quizizz.com/themes/v2/cosmic-picnic/bg_image_1080p.jpg')" }}
@@ -117,7 +133,7 @@ const QuizizzLive = () => {
           <span>
             <FaUsers />
           </span>
-          <span className='text-lg'>4</span>
+          <span className='text-lg'>{quizizzExam?.players?.length}</span>
         </div>
         <div className='absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary font-bold cursor-pointer h-[60px] flex justify-center items-center rounded-lg w-[240px] text-2xl'>
           Bắt đầu
@@ -127,27 +143,26 @@ const QuizizzLive = () => {
       <div className='min-h-[50vh] h-full flex items-center justify-center'>
         {/* <p className=''>Chờ người tham gia tham gia...</p> */}
         <div className='py-10 w-full mx-auto max-w-5xl xl:max-w-7xl grid px-10 grid-cols-5 gap-10 mt-10'>
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
-            return (
-              <div
-                key={Math.random()}
-                className='group/item border border-gray-200 p-4 rounded-xl flex items-center gap-3 relative'
-              >
-                <img
-                  src='https://cf.quizizz.com/join/img/avatars/tablet_sm/monster23.png?w=90&h=90'
-                  alt='logo'
-                  className='h-10 w-10 rounded-full object-cover'
-                />
-                <h2 className='lowercase font-semibold'>đặng tiến hưng</h2>
+          {quizizzExam &&
+            quizizzExam?.players?.length > 0 &&
+            quizizzExam?.players?.map((player) => {
+              console.log('🚀 ~ file: index.tsx:165 ~ quizizzExam.players.map ~ player:', player)
+              return (
                 <div
-                  onClick={() => handleKickGame(index)}
-                  className='hidden absolute top-0 rounded-xl bg-[#EC0B43] w-fit text-white group-hover/item:flex justify-center items-center left-0 w-full h-full cursor-pointer'
+                  key={player._id}
+                  className='group/item border border-gray-200 p-4 rounded-xl flex items-center gap-3 relative'
                 >
-                  <p className='text-center'>Nhấn vào đây để xóa người chơi</p>
+                  <img src={`${player.avatar}`} alt='logo' className='h-10 w-10 rounded-full object-cover' />
+                  <h2 className='lowercase font-semibold'>{player.nameInGame}</h2>
+                  <div
+                    onClick={() => handleKickGame(player._id)}
+                    className='hidden absolute top-0 rounded-xl bg-[#EC0B43] w-fit text-white group-hover/item:flex justify-center items-center left-0 h-full cursor-pointer'
+                  >
+                    <p className='text-center'>Nhấn vào đây để xóa người chơi</p>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
       </div>
 
@@ -156,7 +171,12 @@ const QuizizzLive = () => {
           <div className='w-full max-w-lg'>
             <p className='text-[40px] text-center font-medium'>Bạn có chắc chắn muốn xóa người chơi này?</p>
             <div className='flex justify-between items-center mt-4'>
-              <p className='text-[36px] text-[#FF2E47] font-semibold cursor-pointer w-fit'>Có</p>
+              <p
+                onClick={() => handleKickOutGame(userIdKickGame)}
+                className='text-[36px] text-[#FF2E47] font-semibold cursor-pointer w-fit'
+              >
+                Có
+              </p>
               <p
                 onClick={() => handleKickGame()}
                 className='text-[36px] text-[#45CB85] font-semibold cursor-pointer w-fit'

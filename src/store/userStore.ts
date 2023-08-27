@@ -1,7 +1,7 @@
+import { IPlayer, IRegister } from '../interfaces/user.type'
 import { UserAction, UserState } from './types/user'
 import { devtools, persist } from 'zustand/middleware'
 
-import { IRegister } from '../interfaces/user.type'
 import { create } from 'zustand'
 import http from '../api/instance'
 import { updateNameInGame } from '@/api/user.api'
@@ -13,6 +13,7 @@ export const userStore = create<UserState & UserAction>()(
         user: {} as any,
         isLoading: false,
         errors: '',
+        userIdKickGame: '',
         /* register */
         registerAuth: async (data: IRegister) => {
           try {
