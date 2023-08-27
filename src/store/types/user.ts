@@ -1,4 +1,4 @@
-import { IPlayer, IRegister, IUser } from '../../interfaces/user.type'
+import { IRegister, IUser } from '../../interfaces/user.type'
 
 export type UserState = {
   user: IUser
