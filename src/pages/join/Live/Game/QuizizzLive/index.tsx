@@ -146,7 +146,6 @@ const QuizizzLive = () => {
           {quizizzExam &&
             quizizzExam?.players?.length > 0 &&
             quizizzExam?.players?.map((player) => {
-              console.log('🚀 ~ file: index.tsx:165 ~ quizizzExam.players.map ~ player:', player)
               return (
                 <div
                   key={player._id}

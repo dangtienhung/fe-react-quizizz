@@ -110,7 +110,7 @@ const ListQuizizz = () => {
                               Quiz trực tiếp
                             </div>
                             <div
-                              onClick={() => navigate(`/admin/presentation/${item._id}`)}
+                              onClick={() => handleGetQuizizzExam(item._id, QuizizzType.TEACHERLIVE)}
                               className='cursor-pointer text-sm py-2 flex border-b-2 gap-1 items-center px-1 text-[#4D4D4D] font-medium hover:bg-gray-100'
                             >
                               <MdOutlineWatchLater />

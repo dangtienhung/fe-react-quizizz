@@ -34,6 +34,15 @@ const LoppyGame = () => {
       setIsKickOutGame(true)
     })
   }, [socket])
+  /* nhận bài thi */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('quizizzExam', (data: IQuizizzExam) => {
+      if (data) {
+        useQuizizzExamStore.setState({ quizizzExam: data })
+      }
+    })
+  }, [socket])
   return (
     <>
       <div
@@ -50,13 +59,15 @@ const LoppyGame = () => {
                 className='h-10 w-10 rounded-full bg-cover'
               />
               <div className=''>
-                <h2 className='font-bold text-2xl'>đặng tiến hưng</h2>
+                <h2 className='font-bold text-2xl'>
+                  {quizizzExam?.players?.find((player) => player._id === user._id)?.nameInGame}
+                </h2>
                 <span className='border bg-[#333333] rounded p-[1px] text-[10px] px-1'>you</span>
               </div>
             </div>
             <div className='text-center'>
               <p className='text-[#a3a8a8] font-bold text-base'>Join Game</p>
-              <p className='text-2xl font-bold tracking-widest'>123456</p>
+              <p className='text-2xl font-bold tracking-widest'>{quizizzExam.code}</p>
             </div>
           </div>
           <div className='mt-10 mb-6 mx-auto max-w-xl flex justify-between items-center'>
