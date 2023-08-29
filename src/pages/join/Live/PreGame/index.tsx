@@ -55,7 +55,6 @@ const PreGameLive = () => {
         if (data) {
           socket.on('quizizzExam', (examQuiz: IQuizizzExam) => {
             if (examQuiz) {
-              console.log('🚀 ~ file: index.tsx:62 ~ socket.on ~ examQuiz:', examQuiz)
               useQuizizzExamStore.setState({ quizizzExam: examQuiz })
               navigate(`/join/game/loppy/${examQuiz._id}`)
               setIsLoading(false)

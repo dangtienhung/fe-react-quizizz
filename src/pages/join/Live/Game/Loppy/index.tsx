@@ -20,26 +20,21 @@ const LoppyGame = () => {
     /* gửi id phòng quiz đang chơi lên server */
     socket.emit('joinRoom', { roomId: id, useId: user._id })
   }, [socket])
-  useEffect(() => {
-    if (!socket) return
-    /* nhận emit bị kick game */
-    socket.on('outGame', (data: string) => {
-      /* filter người chơi đó ra */
-      const newPlayers = quizizzExam.players.filter((player) => player._id !== data)
-      /* cập nhật lại danh sách người chơi */
-      useQuizizzExamStore.setState({ quizizzExam: { ...quizizzExam, players: newPlayers } })
-      /* chuyển người chơi bị kick ra phòng pre game */
-      userStore.setState({ userIdKickGame: data })
-      useQuizizzExamStore.setState({ quizizzExam: {} as IQuizizzExam })
-      setIsKickOutGame(true)
-    })
-  }, [socket])
   /* nhận bài thi */
   useEffect(() => {
     if (!socket) return
-    socket.on('quizizzExam', (data: IQuizizzExam) => {
-      if (data) {
-        useQuizizzExamStore.setState({ quizizzExam: data })
+    socket.on('quizizzExam', (examQuiz: IQuizizzExam) => {
+      if (examQuiz) {
+        useQuizizzExamStore.setState({ quizizzExam: examQuiz })
+      }
+    })
+  }, [socket])
+  /* nhận sự kiện admin kích người chơi ra khỏi phòng thi */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('outGame', (data: string) => {
+      if (data === user._id) {
+        setIsKickOutGame(true)
       }
     })
   }, [socket])
@@ -80,7 +75,7 @@ const LoppyGame = () => {
             </div>
           </div>
         </div>
-        <div className='py-10 w-full mx-auto max-w-5xl xl:max-w-7xl grid px-10 grid-cols-5 gap-10'>
+        <div className='py-10 w-full mx-auto max-w-5xl xl:max-w-7xl grid px-10 lg:grid-cols-4 xl:grid-cols-5 gap-10'>
           {quizizzExam?.players?.map((player) => {
             return (
               <div key={player._id} className='border border-gray-200 p-4 rounded-xl flex items-center gap-3'>
