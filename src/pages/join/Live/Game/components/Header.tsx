@@ -2,7 +2,15 @@ import { BsFillLightningChargeFill, BsFillPaletteFill, BsFullscreen } from 'reac
 
 import { Link } from 'react-router-dom'
 
-const Header = () => {
+interface HeaderProps {
+  socket?: any
+  data: { roomId: string; idPlayer: string }
+}
+
+const Header = ({ socket, data }: HeaderProps) => {
+  const handleFinishGame = () => {
+    socket.emit('finishGame', data)
+  }
   return (
     <div className='px-3 h-[70px] flex justify-between items-center bg-[#001B28] text-white fixed top-0 left-0 right-0 bg-opacity-80'>
       <Link to={'/'} className='bg-[#275065] w-[120px] py-2 px-4 rounded-lg'>
@@ -20,7 +28,9 @@ const Header = () => {
         <button className='bg-[#525252] h-10 px-3 rounded-lg'>
           <BsFullscreen />
         </button>
-        <button className='font-bold text-[#001B28] py-2 px-4 rounded-lg bg-white'>Kết thúc</button>
+        <button onClick={() => handleFinishGame()} className='font-bold text-[#001B28] py-2 px-4 rounded-lg bg-white'>
+          Kết thúc
+        </button>
       </div>
     </div>
   )

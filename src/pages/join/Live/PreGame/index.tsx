@@ -51,8 +51,8 @@ const PreGameLive = () => {
   }
   useEffect(() => {
     if (socket) {
-      socket.on('updateName', (data: string) => {
-        if (data) {
+      socket.on('updateName', (data: { message: string; userId: string }) => {
+        if (data.userId === user._id) {
           socket.on('quizizzExam', (examQuiz: IQuizizzExam) => {
             if (examQuiz) {
               useQuizizzExamStore.setState({ quizizzExam: examQuiz })
@@ -74,9 +74,9 @@ const PreGameLive = () => {
             <form className='p-6 bg-[#111111] rounded-xl' onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
               <div className=''>
                 <h2 className='mb-1 text-sm'>Your Quizizz name is ...</h2>
-                <div className='flex bg-white mb-4 rounded-lg items-center h-12'>
-                  <div className='flex items-center justify-center w-8 h-8 flex-shrink-0 rounded-full'>
-                    <img src={`${user.avatar}`} alt='logo' className='w-8 h-8 rounded-full object-cover ml-2' />
+                <div className='flex items-center h-12 mb-4 bg-white rounded-lg'>
+                  <div className='flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full'>
+                    <img src={`${user.avatar}`} alt='logo' className='object-cover w-8 h-8 ml-2 rounded-full' />
                   </div>
                   <input
                     type='text'
@@ -86,7 +86,7 @@ const PreGameLive = () => {
                     value={'' || nameRandom}
                     onChange={(e) => handleOnChange(e)}
                   />
-                  <button className='text-black h-8 w-8 cursor-pointer' onClick={() => handleRandomName()}>
+                  <button className='w-8 h-8 text-black cursor-pointer' onClick={() => handleRandomName()}>
                     <MdOutlinePublishedWithChanges size={20} />
                   </button>
                 </div>
@@ -120,12 +120,12 @@ const PreGameLive = () => {
         </div>
       </div>
       {isLoading && (
-        <div className='fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white flex items-center justify-center'>
+        <div className='fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center text-white bg-black bg-opacity-75'>
           <div className=''>
             <img
               src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAM1BMVEUAAABGGkFDGUBFG0JGGkJEG0BAEUBFGkJFG0FGG0JEGkFFGkBFGkJFGkFFGUFGGkJGGkK/4vrcAAAAEHRSTlMA3yBggEAQ77+QcDDPn1CvUygWVAAAAd5JREFUWMPtl92WxBAMgCOJ32rH+z/tzsyeCsOgPWfv9rvFh1Qj4M8wh39ElZ4o9+DDNB3w3cjQRbNKH7iAUMHpTW/u4FIXRysCwzZ9RdFUoFUaovJGQk9gfJogYaOOYKunt3H3zLy7elMRvwnIFoN3wsJMj2YbrYCLLqH57khK7FtPwGWsu5ASQyugPN4b+ALuYvgUYJ5ew4Bgcxx0JUAlARohHV0tONcWZflTgwgkAErGzw2lQMn652y2FFRfcIMlwqfAKDnlS7hSIBFQsApaERQRIFiGK4GeL8AQkX6x4RMDxpaCfb6AQZbJrRYGpO/kv2C/LTjSm+OmIEcUbwrOROhhhB+k2H/+ecE3z4g7k+jolA7Ycg64I5DEqu8JJK+aWwK5Sh2MBAr6FIk8lIKIqF8c9CQwM86TJFYr0LAMyQ5EcOViKW+SO9nFy4wiuHC5HukXagQKr2xAdRJuvFJgHKVAXS9xPJQCnQ24OF6ZSoB6LQ55Ipu7nfEP068pxbwEQLZwrdRNARpBXWyTaR9CStoJegLZRVPuIzlbtBG0gu6Dw+3M7Pdom1dPK5ByfExbzEtQJVAD2mJeorKgsAxCI5gqXDAwFAibj+mDyHqQHDrnFw8+H99x94eBv+IHtOpba7MtAg8AAAAASUVORK5CYII='
               alt=''
-              className='bg-transparent text-white animate-spin'
+              className='animate-spin text-white bg-transparent'
             />
           </div>
         </div>

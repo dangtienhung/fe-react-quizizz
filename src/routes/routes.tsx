@@ -4,6 +4,7 @@ import CreateByMe from '@/pages/admin/Quiz/CreateByMe'
 import CreateQuestion from '@/pages/admin/Quiz/CreateQuestion'
 import HomePage from '@/pages/home'
 import LayoutAdmin from '@/layouts/LayoutAdmin'
+import LiveMutiple from '@/pages/admin/Quiz/Game/LiveMutiple'
 import LoppyGame from '@/pages/join/Live/Game/Loppy'
 import MyLibrary from '@/pages/admin/MyLibrary'
 import PreGameLive from '@/pages/join/Live/PreGame'
@@ -66,7 +67,8 @@ export const router = createBrowserRouter([
           { path: 'lists/:id', element: <QuizLists /> },
           { path: 'edit/:id', element: <QuizEdit /> },
           { path: 'questions/create/:id', element: <CreateQuestion /> },
-          { path: 'game-live/:id', element: <QuizizzLive /> }
+          { path: 'game-live/:id', element: <QuizizzLive /> },
+          { path: 'startV4/:id', element: <LiveMutiple /> }
         ]
       },
       {

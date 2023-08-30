@@ -18,3 +18,8 @@ export enum EGameInfo {
   ROOM = 'room',
   TYPE = 'type'
 }
+
+export enum EGameMutiple {
+  CHARTS = 'charts',
+  QUESTIONS = 'questions'
+}
