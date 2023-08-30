@@ -35,4 +35,5 @@ export interface IPlayer {
   name: string
   avatar: string
   nameInGame: string
+  scores: number
 }
