@@ -13,6 +13,7 @@ const QuizizzGame = () => {
   const [searchParams] = useSearchParams()
   const [room, setRoom] = useState<string | null>(null)
   const gameType = useGameType()
+  console.log('🚀 ~ file: index.tsx:16 ~ QuizizzGame ~ gameType:', gameType)
   /* store */
   const { quizizzExam, getOneQuizizzExam } = useQuizizzExamStore((state) => state)
   const { getOneQuizActivity } = useQuizizzActivityStore((state) => state)
@@ -34,6 +35,9 @@ const QuizizzGame = () => {
   }
   if (gameType === GameType.SUMMARY && room === null) {
     return <Summary />
+  }
+  if (gameType === GameType.LIVEGAME) {
+    return 'ahihiihi'
   }
   return <GameSolo questions={quizizzExam.questions} />
 }

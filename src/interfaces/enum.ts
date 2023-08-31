@@ -5,7 +5,8 @@ export enum EStatus {
 
 export enum GameType {
   SOLO = 'solo',
-  SUMMARY = 'summary'
+  SUMMARY = 'summary',
+  LIVEGAME = 'liveGame'
 }
 
 export enum ETypeRoom {

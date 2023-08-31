@@ -39,6 +39,16 @@ const LoppyGame = () => {
       }
     })
   }, [socket])
+  /* nhận sự kiện start game */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('playToGame', (data: IQuizizzExam) => {
+      if (data) {
+        useQuizizzExamStore.setState({ quizizzExam: data })
+        navigate(`/join/game/${id}?type=liveGame`)
+      }
+    })
+  }, [socket])
   return (
     <>
       <div

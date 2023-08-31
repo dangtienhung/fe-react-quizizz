@@ -209,7 +209,9 @@ const GameSolo = ({ questions }: GameSoloProps) => {
                 </h2>
               </div>
             </div>
-            <div className='h-1/2 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-1 gap-4'>
+            <div
+              className={`h-1/2 md:grid-cols-2 lg:grid-cols-${questions[currentQuestion]?.questions[0]?.questionAnswers.length} xl:grid-cols-${questions[currentQuestion]?.questions[0]?.questionAnswers.length} grid grid-cols-1 gap-4`}
+            >
               {quetionsList[currentQuestion].questionAnswers.map((card, index) => {
                 if (selectAnswer === null) {
                   return (

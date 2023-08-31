@@ -16,7 +16,9 @@ const cardGameList = [
   { bgColor: '#2F6DAE', boxShadow: '#214E7C' },
   { bgColor: '#2C9CA6', boxShadow: '#1F6D74' },
   { bgColor: '#EEB243', boxShadow: '#C68612' },
-  { bgColor: '#D4546A', boxShadow: '#BA2F47' }
+  { bgColor: '#D4546A', boxShadow: '#BA2F47' },
+  { bgColor: '#A05EB5', boxShadow: '#7D3A8C' },
+  { bgColor: '#F05252', boxShadow: '#C12A2A' }
 ]
 
 const CardGame = ({ card, handleAnswerOptionClick, answerResult, index, selectAnswer }: CardGameProps) => {
@@ -54,8 +56,8 @@ const CardGame = ({ card, handleAnswerOptionClick, answerResult, index, selectAn
     <div
       className={`${cardClasses}`}
       style={{
-        boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
-        backgroundColor: `${cardGameList[index].bgColor}`
+        boxShadow: `${cardGameList[index]?.boxShadow} 0px 6px 0px 0px`,
+        backgroundColor: `${cardGameList[index]?.bgColor}`
       }}
       onClick={() => handleAnswerOptionClick({ id: card._id, index })}
     >

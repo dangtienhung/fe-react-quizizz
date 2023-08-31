@@ -40,6 +40,11 @@ const QuizizzLive = () => {
       setCopySuccess(false)
     }, 2500)
   }
+  const handleStartGame = () => {
+    if (quizizzExam.players.length > 0) {
+      socket.emit('startGame', { roomId: roomId })
+    }
+  }
   /* nhận bài thi */
   useEffect(() => {
     if (!socket) return
@@ -56,6 +61,16 @@ const QuizizzLive = () => {
       if (data) {
         useQuizizzExamStore.setState({ quizizzExam: { ...quizizzExam, players: [] } })
         navigate(`/admin`)
+      }
+    })
+  }, [socket])
+  /* nhận sự kiện start game */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('playToGame', (data: IQuizizzExam) => {
+      if (data) {
+        useQuizizzExamStore.setState({ quizizzExam: data })
+        navigate(`/admin/quiz/startV4/${roomId}`)
       }
     })
   }, [socket])
@@ -147,7 +162,7 @@ const QuizizzLive = () => {
           <span className='text-lg'>{quizizzExam?.players?.length}</span>
         </div>
         <div
-          onClick={() => (quizizzExam.players.length > 0 ? navigate(`/admin/quiz/startV4/${roomId}`) : null)}
+          onClick={() => handleStartGame()}
           className={`absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary font-bold cursor-pointer h-[60px] flex justify-center items-center rounded-lg w-[240px] text-2xl ${
             quizizzExam.players.length === 0 && 'disabled !cursor-default'
           }`}

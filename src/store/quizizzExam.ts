@@ -22,7 +22,7 @@ export const useQuizizzExamStore = create<IQuizizzExamState & IQuizizzExamAction
             set({ quizizzExams: data })
           } catch (error: any) {
             set({ isLoading: false })
-            set({ error: error.response.data.message })
+            set({ error: error })
           }
         },
         /* get one */
@@ -46,7 +46,7 @@ export const useQuizizzExamStore = create<IQuizizzExamState & IQuizizzExamAction
             set({ quizizzExam: response.data })
           } catch (error: any) {
             set({ isLoading: false })
-            set({ error: error.response.data.message })
+            set({ error: error })
           }
         },
         /* get exam by questionId */
