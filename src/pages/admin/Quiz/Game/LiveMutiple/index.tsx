@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { AiFillFire } from 'react-icons/ai'
+import { AnswerResult } from '@/pages/join/Game/interface/answerResult'
 import { FaUsers } from 'react-icons/fa'
 import Header from '../components/Header'
 import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
@@ -42,6 +43,19 @@ const LiveMutiple = () => {
       if (data) {
         useQuizizzExamStore.setState({ quizizzExam: data })
       }
+    })
+  }, [socket])
+  /* nhận câu trả lời */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('answerResult', (data: AnswerResult) => {
+      console.log('🚀 ~ file: index.tsx:52 ~ socket.on ~ data:', data)
+      // for (let i = 0; i < quizizzExam.players.length; i++) {
+      //   if (quizizzExam.players[i]._id === data.userId) {
+      //     ;(quizizzExam.players[i].scores += data.score) / 2
+      //     useQuizizzExamStore.setState({ quizizzExam: quizizzExam })
+      //   }
+      // }
     })
   }, [socket])
   return (
@@ -124,7 +138,10 @@ const LiveMutiple = () => {
                                   <span className='z-20 text-white'>{player.scores}</span>
                                 </span>
                                 <div className='flex-1 rounded-lg bg-[#000000] h-full w-full'>
-                                  <div className={`bg-[#4ed190] h-full w-[${player.scores}%] rounded-md`}></div>
+                                  <div
+                                    className={`bg-[#4ed190] h-full w-[${player.scores}%] rounded-md`}
+                                    style={{ width: `${player.scores}%` }}
+                                  ></div>
                                 </div>
                               </div>
                               <span className='cursor-pointer' onClick={() => handleKickGame(player._id)}>

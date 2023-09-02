@@ -24,3 +24,10 @@ export enum EGameMutiple {
   CHARTS = 'charts',
   QUESTIONS = 'questions'
 }
+
+export enum EAnswerGame {
+  SOLO = 'SOLO',
+  TEAM = 'TEAM',
+  MUTIPLE = 'MUTIPLE',
+  TEACHER = 'TEACHER'
+}

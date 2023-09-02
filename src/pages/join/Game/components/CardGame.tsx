@@ -22,7 +22,7 @@ const cardGameList = [
 ]
 
 const CardGame = ({ card, handleAnswerOptionClick, answerResult, index, selectAnswer }: CardGameProps) => {
-  const cardClasses = 'rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95'
+  const cardClasses = 'rounded text-white text-center cursor-pointer hover:bg-opacity-95'
 
   if (selectAnswer && selectAnswer !== null && answerResult) {
     return (
@@ -31,10 +31,8 @@ const CardGame = ({ card, handleAnswerOptionClick, answerResult, index, selectAn
           selectAnswer.index === index ? 'block' : answerResult?.answer._id === card._id ? 'block' : 'invisible'
         }`}
         style={{
-          boxShadow: `${
-            answerResult?.answer._id === card._id ? '#0E9F6E' : cardGameList[index].bgColor
-          } 0px 6px 0px 0px`,
-          backgroundColor: `${answerResult?.answer._id === card._id ? '#2C9CA6' : cardGameList[index].bgColor}`
+          boxShadow: `${answerResult?.answer._id === card._id ? '#0E9F6E' : '#F05252'} 0px 6px 0px 0px`,
+          backgroundColor: `${answerResult?.answer._id === card._id ? '#0E9F6E' : cardGameList[index].bgColor}`
         }}
         onClick={() => handleAnswerOptionClick({ id: card._id, index })}
       >
@@ -44,7 +42,7 @@ const CardGame = ({ card, handleAnswerOptionClick, answerResult, index, selectAn
               ? 'bg-green-500'
               : selectAnswer.id !== answerResult?.answer?._id && selectAnswer.id === card._id
               ? 'bg-[#F05252]'
-              : 'bg-[#2C9CA6]'
+              : 'bg-[#0E9F6E]'
           } flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}
         >
           {card.content}

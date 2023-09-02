@@ -5,8 +5,9 @@ export type SelectAnswer = { index: number; id: string }
 
 export type GameStoreState = {
   questions: IQuizizzsQuestion[]
-  selectAnswer: null | SelectAnswer
-  answerResult: null | AnswerResult
+  quizActivityId: string
+  selectAnswer: SelectAnswer | null
+  answerResult: AnswerResult | null
   currentQuestion: number
   answers: any[]
   scores: any[]

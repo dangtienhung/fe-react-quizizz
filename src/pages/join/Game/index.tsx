@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
+import GameMutipleLive from './components/GameMutiple'
 import GameSolo from './components/GameSolo'
 import { GameType } from '@/interfaces/enum'
 import Summary from './components/Summary'
@@ -13,7 +14,6 @@ const QuizizzGame = () => {
   const [searchParams] = useSearchParams()
   const [room, setRoom] = useState<string | null>(null)
   const gameType = useGameType()
-  console.log('🚀 ~ file: index.tsx:16 ~ QuizizzGame ~ gameType:', gameType)
   /* store */
   const { quizizzExam, getOneQuizizzExam } = useQuizizzExamStore((state) => state)
   const { getOneQuizActivity } = useQuizizzActivityStore((state) => state)
@@ -37,7 +37,7 @@ const QuizizzGame = () => {
     return <Summary />
   }
   if (gameType === GameType.LIVEGAME) {
-    return 'ahihiihi'
+    return <GameMutipleLive />
   }
   return <GameSolo questions={quizizzExam.questions} />
 }

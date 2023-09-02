@@ -1,4 +1,5 @@
 export interface AnswerResult {
+  userId: string
   result: boolean
   answer: {
     _id: string
@@ -8,4 +9,5 @@ export interface AnswerResult {
     updatedAt: string
     quizz_question: string
   }
+  score: number
 }
