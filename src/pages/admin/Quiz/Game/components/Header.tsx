@@ -8,19 +8,19 @@ import { useQuizizzExamStore } from '@/store/quizizzExam'
 import { useSocket } from '@/hooks/useSocket'
 
 const Header = () => {
-  const socket = useSocket()
+  // const socket = useSocket()
   const [copyCode, setCopyCode] = useState<boolean>(false)
   const { quizizzExam } = useQuizizzExamStore((state) => state)
   const handleCopyCode = (code: string) => {
     const copy = copyCodeGame(code)
     setCopyCode(copy)
   }
-  useEffect(() => {
-    if (!socket) return
-    socket.on('quizizzExam', (data: any) => {
-      console.log(data)
-    })
-  }, [socket])
+  // useEffect(() => {
+  //   if (!socket) return
+  //   socket.on('quizizzExam', (data: any) => {
+  //     console.log(data)
+  //   })
+  // }, [socket])
   return (
     <div className='flex fixed top-0 left-0 right-0 z-20 justify-between p-2 items-center h-[72px] bg-black bg-opacity-70 text-white'>
       <Link to={'/'} className='py-2 px-4 rounded-lg inline-block bg-[#262626] w-fit'>

@@ -10,4 +10,5 @@ export interface AnswerResult {
     quizz_question: string
   }
   score: number
+  currentQuestion: number
 }

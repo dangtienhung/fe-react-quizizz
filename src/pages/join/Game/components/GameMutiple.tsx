@@ -77,7 +77,8 @@ const GameMutipleLive = () => {
       userId: user._id,
       quizizzExamQuestionId: questionList[currentQuestion]?._id,
       quizizzExamQuestionAnswerId: id,
-      score: scores
+      score: scores,
+      currentQuestion: currentQuestion
     })
   }
   /* nhận câu trả lời đúng */

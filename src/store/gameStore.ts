@@ -12,6 +12,8 @@ export const useGameSolo = create<GameStoreState & GameStoreAction>()((set) => (
   scoreSort: [],
   rank: 0,
   quizActivityId: '',
+  totalScores: [],
+  answersResult: [],
   currentQuestion: Number(localStorage.getItem('currentQuestion')) || 0,
   setCurrentQuestion: (newQuestion: number) => {
     set((state) => ({ ...state, currentQuestion: newQuestion }))

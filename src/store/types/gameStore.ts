@@ -13,7 +13,9 @@ export type GameStoreState = {
   scores: any[]
   score: number
   rank: number | null
-  scoreSort: { score: number; id: string }[]
+  scoreSort: AnswerResult[]
+  totalScores: AnswerResult[]
+  answersResult: AnswerResult[]
 }
 
 export type GameStoreAction = {
