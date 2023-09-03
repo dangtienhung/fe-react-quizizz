@@ -13,8 +13,8 @@ export type GameStoreState = {
   scores: any[]
   score: number
   rank: number | null
-  scoreSort: AnswerResult[]
-  totalScores: AnswerResult[]
+  scoreSort: { userId: string; score: number }[]
+  totalScores: { userId: string; score: number }[]
   answersResult: AnswerResult[]
 }
 

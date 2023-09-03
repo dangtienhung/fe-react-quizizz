@@ -12,3 +12,14 @@ export const caculatorPercent = (data: IQuizizzActivity[]) => {
   })
   return result
 }
+
+export const caculatorPercentOfQuizizz = (totalAnswersIsCorrectTrue: number | undefined, totalQuestions: number) => {
+  console.log('🚀 ~ file: caculatorPercent.ts:17 ~ caculatorPercentOfQuizizz ~ totalQuestions:', totalQuestions)
+  console.log(
+    '🚀 ~ file: caculatorPercent.ts:17 ~ caculatorPercentOfQuizizz ~ totalAnswersIsCorrectTrue:',
+    totalAnswersIsCorrectTrue
+  )
+  if (!totalAnswersIsCorrectTrue) return 0
+  const percent = Math.round((totalAnswersIsCorrectTrue / totalQuestions) * 100)
+  return percent
+}

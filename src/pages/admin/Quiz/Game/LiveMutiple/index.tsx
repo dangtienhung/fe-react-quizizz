@@ -6,6 +6,7 @@ import { FaUsers } from 'react-icons/fa'
 import Header from '../components/Header'
 import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import { IoClose } from 'react-icons/io5'
+import { caculatorPercentOfQuizizz } from '@/utils/caculatorPercent'
 import { useGameSolo } from '@/store/gameStore'
 import { useParams } from 'react-router-dom'
 import { useQuizizzExamStore } from '@/store/quizizzExam'
@@ -21,8 +22,8 @@ const LiveMutiple = () => {
   const [gameSelect, setGameSelect] = useState(0)
   const { user, userIdKickGame } = userStore((state) => state)
   const { quizizzExam } = useQuizizzExamStore((state) => state)
-  const { answersResult, totalScores, scoreSort } = useGameSolo((state) => state)
-  console.log('🚀 ~ file: index.tsx:25 ~ LiveMutiple ~ scoreSort:', scoreSort)
+  const { answersResult, totalScores } = useGameSolo((state) => state)
+  console.log('🚀 ~ file: index.tsx:26 ~ LiveMutiple ~ answersResult:', answersResult)
   const handleKickGame = (id?: string) => {
     userStore.setState({ userIdKickGame: id })
     setIsKickOutGame(!isKickOutGame)
@@ -63,22 +64,24 @@ const LiveMutiple = () => {
           }
         }, []),
         /* tính tổng điểm score của mỗi người dựa vào userId sau mỗi câu trả lời */
-        totalScores: [...useGameSolo.getState().answersResult, data].reduce((acc: AnswerResult[], current) => {
-          const x = acc.find((item) => item.userId === current.userId)
-          if (!x) {
-            return acc.concat([current])
-          } else {
-            return acc.map((item) => {
-              if (item.userId === current.userId) {
-                return { ...item, score: item.score + current.score }
-              } else {
-                return item
-              }
-            })
-          }
-        }, []),
-        /* sắp xếp theo thứ hạng người dụng dựa vào tổng điểm */
-        scoreSort: [...useGameSolo.getState().totalScores].sort((a, b) => b.score - a.score)
+        totalScores: [...useGameSolo.getState().answersResult, data].reduce(
+          (acc: { userId: string; score: number }[], current) => {
+            const x = acc.find((item: { userId: string; score: number }) => item.userId === current.userId)
+            if (!x) {
+              return acc.concat([{ userId: current.userId, score: current.score }])
+            } else {
+              return acc.map((item) => {
+                if (item.userId === current.userId) {
+                  return { ...item, score: item.score + current.score }
+                } else {
+                  return item
+                }
+              })
+            }
+          },
+          []
+        )
+        /* dựa vào điểm của người dùng sếp thứ hạng của người đang chơi với những người khác */
       }))
     })
   }, [socket])
@@ -138,103 +141,54 @@ const LiveMutiple = () => {
                       <tbody className=''>
                         {quizizzExam.players.map((player, index) => {
                           /* sort điểm */
-                          if (scoreSort.length > 0) {
-                            /* sắp xếp lại vị trí người chơi theo số điểm */
-                            return (
-                              <tr
-                                className='group/row border border-gray-300 first:rounded-xl overflow-hidden'
-                                key={player._id}
-                              >
-                                <td className='p-3 first:rounded-l-xl w-[120px] font-medium text-white bg-[#2D1B24]'>
-                                  {index + 1}
-                                </td>
-                                <td className='p-3 w-[120px] bg-[#2D1B24]'>
-                                  <div className='flex items-center gap-2'>
-                                    <img
-                                      src={scoreSort.find((item) => item.userId === player._id) ? player.avatar : ''}
-                                      alt={player.nameInGame}
-                                      className='h-5 w-5 rounded-full object-cover'
-                                    />
-                                    <span className='truncate text-white'>
-                                      {scoreSort.find((item) => item.userId === player._id) ? player.nameInGame : ''}
+                          return (
+                            <tr
+                              className='group/row border border-gray-300 first:rounded-xl overflow-hidden'
+                              key={player._id}
+                            >
+                              <td className='p-3 first:rounded-l-xl w-[120px] font-medium text-white bg-[#2D1B24]'>
+                                {index + 1}
+                              </td>
+                              <td className='p-3 w-[120px] bg-[#2D1B24]'>
+                                <div className='flex items-center gap-2'>
+                                  <img
+                                    src={player.avatar}
+                                    alt={player.nameInGame}
+                                    className='h-5 w-5 rounded-full object-cover'
+                                  />
+                                  <span className='truncate text-white'>{player.nameInGame}</span>
+                                </div>
+                              </td>
+                              <td className='p-3 w-[120px] text-white bg-[#2D1B24]'>
+                                {totalScores.find((item) => item.userId === player._id)?.score || 0}
+                              </td>
+                              <td className='p-3 flex items-center gap-2 bg-[#2D1B24] -z-10 rounded-r-xl'>
+                                <div className='relative flex-1 h-7 rounded-md bg-[#2D1B24]'>
+                                  <span className='absolute flex items-center gap-[2px] top-1/2 left-8 text-white -translate-x-1/2 -translate-y-1/2'>
+                                    <AiFillFire size={18} className='z-20' />
+                                    <span className='z-20 text-white'>
+                                      {answersResult.find((item) => item.userId === player._id)?.currentQuestion + 1 ||
+                                        0}
                                     </span>
-                                  </div>
-                                </td>
-                                <td className='p-3 w-[120px] text-white bg-[#2D1B24]'>
-                                  {scoreSort.find((item) => item.userId === player._id)?.score || 0}
-                                </td>
-                                <td className='p-3 flex items-center gap-2 bg-[#2D1B24] -z-10 rounded-r-xl'>
-                                  <div className='relative flex-1 h-7 rounded-md bg-[#2D1B24]'>
-                                    <span className='absolute flex items-center gap-[2px] top-1/2 left-8 text-white -translate-x-1/2 -translate-y-1/2'>
-                                      <AiFillFire size={18} className='z-20' />
-                                      <span className='z-20 text-white'>
-                                        {/* lấy ra currentQuestion mới nhất mà người dùng đang chơi */}
-                                        {answersResult.find((item) => item.userId === player._id)?.currentQuestion || 0}
-                                      </span>
-                                    </span>
-                                    <div className='flex-1 rounded-lg bg-[#000000] h-full w-full'>
-                                      <div
-                                        className={`bg-[#4ed190] h-full w-[${player.scores}%] rounded-md`}
-                                        style={{
-                                          width: `${20}%`
-                                        }}
-                                      ></div>
-                                    </div>
-                                  </div>
-                                  <span className='cursor-pointer' onClick={() => handleKickGame(player._id)}>
-                                    <IoClose size={18} />
                                   </span>
-                                </td>
-                              </tr>
-                            )
-                          }
-                          if (scoreSort.length === 0) {
-                            return (
-                              <tr
-                                className='group/row border border-gray-300 first:rounded-xl overflow-hidden'
-                                key={player._id}
-                              >
-                                <td className='p-3 first:rounded-l-xl w-[120px] font-medium text-white bg-[#2D1B24]'>
-                                  {index + 1}
-                                </td>
-                                <td className='p-3 w-[120px] bg-[#2D1B24]'>
-                                  <div className='flex items-center gap-2'>
-                                    <img
-                                      src={player.avatar}
-                                      alt={player.nameInGame}
-                                      className='h-5 w-5 rounded-full object-cover'
-                                    />
-                                    <span className='truncate text-white'>{player.nameInGame}</span>
+                                  <div className='flex-1 rounded-lg bg-[#000000] h-full w-full'>
+                                    <div
+                                      className={`bg-[#4ed190] h-full rounded-md`}
+                                      style={{
+                                        width: `${caculatorPercentOfQuizizz(
+                                          answersResult.find((item) => item.userId === player._id)?.currentQuestion + 1,
+                                          quizizzExam?.questions[0].questions.length
+                                        )}%`
+                                      }}
+                                    ></div>
                                   </div>
-                                </td>
-                                <td className='p-3 w-[120px] text-white bg-[#2D1B24]'>
-                                  {totalScores.find((item) => item.userId === player._id)?.score || 0}
-                                </td>
-                                <td className='p-3 flex items-center gap-2 bg-[#2D1B24] -z-10 rounded-r-xl'>
-                                  <div className='relative flex-1 h-7 rounded-md bg-[#2D1B24]'>
-                                    <span className='absolute flex items-center gap-[2px] top-1/2 left-8 text-white -translate-x-1/2 -translate-y-1/2'>
-                                      <AiFillFire size={18} className='z-20' />
-                                      <span className='z-20 text-white'>
-                                        {/* lấy ra currentQuestion mới nhất mà người dùng đang chơi */}
-                                        {answersResult.find((item) => item.userId === player._id)?.currentQuestion || 0}
-                                      </span>
-                                    </span>
-                                    <div className='flex-1 rounded-lg bg-[#000000] h-full w-full'>
-                                      <div
-                                        className={`bg-[#4ed190] h-full w-[${player.scores}%] rounded-md`}
-                                        style={{
-                                          width: `${20}%`
-                                        }}
-                                      ></div>
-                                    </div>
-                                  </div>
-                                  <span className='cursor-pointer' onClick={() => handleKickGame(player._id)}>
-                                    <IoClose size={18} />
-                                  </span>
-                                </td>
-                              </tr>
-                            )
-                          }
+                                </div>
+                                <span className='cursor-pointer' onClick={() => handleKickGame(player._id)}>
+                                  <IoClose size={18} />
+                                </span>
+                              </td>
+                            </tr>
+                          )
                         })}
                       </tbody>
                     </table>

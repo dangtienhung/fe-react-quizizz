@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { AnswerResult } from '../interface/answerResult'
 import CardGame from './CardGame'
@@ -8,12 +9,12 @@ import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import ProgressSibar from './ProgressSibar'
 import { calculateScore } from '@/utils/calculateScore'
 import { useGameSolo } from '@/store/gameStore'
-import { useParams } from 'react-router-dom'
 import { useSocket } from '@/hooks/useSocket'
 import { userStore } from '@/store/userStore'
 
 const GameMutipleLive = () => {
   const { id: roomId } = useParams()
+  const navigate = useNavigate()
   let interval: NodeJS.Timeout
   const { user } = userStore((state) => state)
   const {
@@ -30,6 +31,8 @@ const GameMutipleLive = () => {
   const [timer, setTimer] = useState(30) // Thời gian ban đầu (s)
   const [scoreAnswer, setScoreAnswer] = useState<number>(0)
   const [finish, setFinish] = useState<boolean>(false)
+  const [ísKickOutGame, setIsKickOutGame] = useState<boolean>(false)
+
   /* đếm ngược thời gian */
   useEffect(() => {
     interval = setInterval(() => {
@@ -97,11 +100,6 @@ const GameMutipleLive = () => {
           score: data.result ? scores : 0,
           answerResult: data.answer._id
         }
-        // socket.emit('updateAnswer', {
-        //   quizActivityId,
-        //   userId: user._id,
-        //   answer: answerItem
-        // })
         /* lưu vào danh sách câu trả lời */
         const arrayAnswers = new Set(answers)
         useGameSolo.setState(() => ({
@@ -113,6 +111,7 @@ const GameMutipleLive = () => {
           const nextQuestion = currentQuestion + 1
           if (nextQuestion < questionList.length) {
             setCurrentQuestion(nextQuestion)
+            setTimer(questionList[nextQuestion].timer)
           }
           useGameSolo.setState({
             answerResult: null as any,
@@ -144,6 +143,14 @@ const GameMutipleLive = () => {
       }
     })
   }, [socket, selectAnswer, answers])
+  useEffect(() => {
+    if (!socket) return
+    socket.on('outGame', (data: string) => {
+      if (data === user._id) {
+        setIsKickOutGame(true)
+      }
+    })
+  }, [socket])
   return (
     <>
       <div
@@ -211,6 +218,17 @@ const GameMutipleLive = () => {
         <div className='opacity-90 fixed top-0 bottom-0 left-0 right-0 z-10 transition-all duration-1000 bg-black select-none'>
           <div className='top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2'>
             <h2 className='text-4xl font-bold text-white'>Tất cả đã được làm xong</h2>
+          </div>
+        </div>
+      )}
+      {ísKickOutGame && (
+        <div className='bg-opacity-80 fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center text-white bg-black'>
+          <div className='flex flex-col items-center justify-center gap-5 text-center'>
+            <img src='https://cf.quizizz.com/game/img/ui/invalid_game.png' alt='' />
+            <h2 className='text-lg font-semibold'>You were kicked out of game</h2>
+            <p className='text-[#519900] cursor-pointer font-bold text-xl' onClick={() => navigate(`/`)}>
+              Back To Home
+            </p>
           </div>
         </div>
       )}
