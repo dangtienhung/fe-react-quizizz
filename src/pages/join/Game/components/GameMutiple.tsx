@@ -5,10 +5,12 @@ import { AnswerResult } from '../interface/answerResult'
 import CardGame from './CardGame'
 import { EAnswerGame } from '@/interfaces/enum'
 import Header from '../../components/Header'
+import { IQuizizzActivity } from '@/interfaces/quizizzActivity.type'
 import { IQuizizzExam } from '@/interfaces/quizizzExam.type'
 import ProgressSibar from './ProgressSibar'
 import { calculateScore } from '@/utils/calculateScore'
 import { useGameSolo } from '@/store/gameStore'
+import { useQuizizzActivityStore } from '@/store/quizizzActivity'
 import { useSocket } from '@/hooks/useSocket'
 import { userStore } from '@/store/userStore'
 
@@ -125,23 +127,38 @@ const GameMutipleLive = () => {
               selectAnswer: null as any
             })
             /* thêm vào db quizizz Activity */
-            const body = []
+            const body = {
+              userId: user._id,
+              quizizzExamId: roomId,
+              answers: [],
+              score: 0,
+              answerTypeGame: EAnswerGame.MUTIPLE
+            } as {
+              userId: string
+              quizizzExamId: string
+              answers: any[]
+              score: number
+              answerTypeGame: EAnswerGame
+            }
             for (let i = 0; i < answers.length; i++) {
               if (i % 2 === 0) {
-                body.push({
-                  userId: user._id,
-                  quizizzExamId: roomId,
-                  quizizzExamQuestionId: answers[i].question,
-                  quizizzExamQuestionAnswerId: answers[i].answerSelect,
-                  score: answers[i].score
-                })
+                body.answers.push(answers[i])
               }
             }
-            console.log('🚀 ~ file: GameMutiple.tsx:120 ~ setTimeout ~ body:', body)
+            if (body.answers.length === questionList.length) {
+              /* tính tổng điểm */
+              body.score = body.answers.reduce((a, b) => a + b.score, 0)
+              socket.emit('addQuizizzActivity', body)
+              useGameSolo.setState({ answers: [] })
+              useGameSolo.setState({ score: 0 })
+            }
           }
         }, 2000)
       }
     })
+    return () => {
+      socket.off('answerResult')
+    }
   }, [socket, selectAnswer, answers])
   useEffect(() => {
     if (!socket) return
@@ -149,6 +166,20 @@ const GameMutipleLive = () => {
       if (data === user._id) {
         setIsKickOutGame(true)
       }
+    })
+  }, [socket])
+  /** nhận activity */
+  useEffect(() => {
+    if (!socket) return
+    socket.on('quizizzActivity', (data: IQuizizzActivity) => {
+      setTimeout(() => {
+        useQuizizzActivityStore.setState({ quizizzActivitie: data })
+        useQuizizzActivityStore.setState((state) => ({
+          quizizzActivities: [...state.quizizzActivities, data]
+        }))
+        navigate(`/join/game/${roomId}?type=summary&finish=true`)
+      }, 1000)
+      socket.disconnect()
     })
   }, [socket])
   return (
@@ -172,21 +203,6 @@ const GameMutipleLive = () => {
               className={`h-1/2 md:grid-cols-2 lg:grid-cols-${questionList[currentQuestion].questionAnswers.length} xl:grid-cols-${questionList[currentQuestion].questionAnswers.length} grid grid-cols-1 gap-4`}
             >
               {questionList[currentQuestion].questionAnswers.map((answer, index) => {
-                // return (
-                //   <div
-                //     key={index}
-                //     onClick={() => handleAnswerOptionClick({ id: answer._id, index })}
-                //     className={`bg-[${cardGameList[index].bgColor}] rounded text-white transition-all duration-500 text-center cursor-pointer hover:bg-opacity-95`}
-                //     style={{
-                //       boxShadow: `${cardGameList[index].boxShadow} 0px 6px 0px 0px`,
-                //       backgroundColor: `${cardGameList[index].bgColor}`
-                //     }}
-                //   >
-                //     <div className={`flex rounded-t h-full w-full font-medium text-[30px] justify-center items-center`}>
-                //       {answer.content}
-                //     </div>
-                //   </div>
-                // )
                 if (answerResult === null) {
                   return (
                     <CardGame
